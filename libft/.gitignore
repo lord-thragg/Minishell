@@ -1,0 +1,5 @@
+# ignoring main a.out and .o and .a
+main.c
+a.out
+*.o
+*.a

@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 19:27:46 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/19 10:11:57 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/11 21:37:01 by lucius            #+#    #+#             */
+/*   Updated: 2024/11/12 13:41:23 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	*input;
+	char	*sub;
+	size_t	i;
 
-	while (1)
+	i = 0;
+	sub = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
+	if (!sub)
+		return (NULL);
+	while (*(s + i))
 	{
-		input = readline("minishell-> ");
-		if (input == NULL || strcmp(input, "exit") == 0)
-		{
-			free(input);
-			break ;
-		}
-		if (*input)
-			add_history(input);
+		sub[i] = f(i, s[i]);
+		i++;
 	}
-	return (0);
+	sub[i] = '\0';
+	return (sub);
 }
