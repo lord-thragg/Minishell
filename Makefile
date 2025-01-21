@@ -16,9 +16,10 @@ OBJDIR = obj
 INCDIR = includes
 
 # Source Files
-SRC_MAIN 		=	main.c #minishell.c
+SRC_MAIN 		=	main.c minishell.c
+SRC_PARSING		=	signals/signal_handling.c
 
-SRC = $(SRC_MAIN)
+SRC = $(SRC_MAIN) $(SRC_PARSING)
 OBJ = $(SRC:.c=.o)
 SRC := $(addprefix $(SRCDIR)/, $(SRC))
 OBJ := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(OBJ))

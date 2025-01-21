@@ -6,18 +6,14 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:27:46 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/20 08:23:54 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/01/20 09:31:48 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int ac, char **av)
+int	main(void)
 {
-	char	*input;
-
-	(void)ac;
-	(void)av;
 	printf(CYAN"\
 \t███╗   ███╗██╗███╗   ██╗██╗███████╗██╗  ██╗███████╗██╗     ██╗ \n\
 \t████╗ ████║██║████╗  ██║██║██╔════╝██║  ██║██╔════╝██║     ██║ \n\
@@ -26,16 +22,6 @@ int	main(int ac, char **av)
 \t██║ ╚═╝ ██║██║██║ ╚████║██║███████║██║  ██║███████╗███████╗███████╗ \n\
 \t╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ \n\
 \n"RESET);
-	while (1)
-	{
-		input = readline("\033[0;32mminishell\033[0m-> ");
-		if (input == NULL || strcmp(input, "exit") == 0)
-		{
-			free(input);
-			break ;
-		}
-		if (*input)
-			add_history(input);
-	}
+	minishell();
 	return (0);
 }

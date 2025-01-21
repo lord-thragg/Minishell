@@ -1,31 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/20 11:00:33 by luluzuri         ###   ########.fr       */
+/*   Created: 2025/01/21 07:49:26 by luluzuri          #+#    #+#             */
+/*   Updated: 2025/01/21 08:15:23 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+//#include "minishell.h"
 
-void	minishell(void)
+int	cd(char *path)
 {
-	char	*input;
-
-	set_sigact();
-	while (1)
+	if (chdir(path) != 0)
 	{
-		input = readline("\033[0;32mminishell\033[0m-> ");
-		if (input == NULL || strcmp(input, "exit") == 0)
-		{
-			free(input);
-			break ;
-		}
-		if (*input)
-			add_history(input);
+		perror("chdir");
+		return (-1);
 	}
+	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	if (argc < 2)
+	{
+		printf("Usage: %s path\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+	if (cd(argv[1]) != 0)
+	{
+		perror("Echec de la commande cd");
+		exit(EXIT_FAILURE);
+	}
+	return (0);
 }

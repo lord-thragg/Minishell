@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/20 08:23:11 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/01/20 10:27:39 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include <string.h>
 # include <unistd.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -35,5 +37,11 @@ typedef struct s_command
 	char	**options;
 	char	*arguments;
 }	t_command;
+
+/* MAIN */
+void	minishell(void);
+
+/* SIGNALS */
+void	set_sigact(void);
 
 #endif
