@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/21 07:49:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/21 08:24:50 by luluzuri         ###   ########.fr       */
+/*   Created: 2025/01/21 08:18:22 by luluzuri          #+#    #+#             */
+/*   Updated: 2025/01/21 08:26:18 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,9 @@
 #include <stdlib.h>
 //#include "minishell.h"
 
-int	cd(char *path)
+int	main(void)
 {
-	if (chdir(path) != 0)
-	{
-		perror("chdir");
-		return (-1);
-	}
-	return (0);
-}
+	char	cwd[1024];
 
-int	main(int argc, char **argv)
-{
-	if (argc < 2)
-	{
-		printf("Usage: %s path\n", argv[0]);
-		exit(EXIT_FAILURE);
-	}
-	if (cd(argv[1]) != 0)
-	{
-		perror("Echec de la commande cd");
-		exit(EXIT_FAILURE);
-	}
-	return (0);
+	printf("%s\n", getcwd(cwd, sizeof(cwd)));
 }
