@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/20 10:27:39 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/01/22 22:01:52 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,19 @@ typedef struct s_command
 	char	*arguments;
 }	t_command;
 
+typedef struct s_data
+{
+	char	**env;
+	char	**pwd;
+}	t_data;
+
+
 /* MAIN */
 void	minishell(void);
 
 /* SIGNALS */
 void	set_sigact(void);
+
+/* PROGRAMS */
 
 #endif
