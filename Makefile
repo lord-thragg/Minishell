@@ -71,7 +71,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 
 # Linking Rule
 $(NAME): $(OBJ) $(LIBFT)
-	$(V)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJ) $(BONUS_OBJ) $(LIBS) $(MLXFLAGS) -o $(NAME)
+	$(V)$(CC) $(CFLAGS) $(OBJ) $(BONUS_OBJ) $(LIBS) $(LDFLAGS) $(MLXFLAGS) -o $(NAME)
 	$(V)echo $(GREEN)"[$(NAME)] Executable created ✅"$(RESET)
 
 # Libft

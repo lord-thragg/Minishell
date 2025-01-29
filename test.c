@@ -5,32 +5,53 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 18:16:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/28 18:52:02 by luluzuri         ###   ########.fr       */
+/*   Created: 2025/01/29 15:24:53 by luluzuri          #+#    #+#             */
+/*   Updated: 2025/01/29 15:31:03 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "libft/libft.h"
 
-int	main(int ac, char **av, char **env)
+// Gestionnaire pour SIGINT (Ctrl+C)
+void	handle_sigint(int sig)
 {
-	char	*home;
-	char	**path;
-	int		i;
-
-	(void)ac;
-	(void)av;
-	(void)env;
-	i = 0;
-	// Récupérer la valeur de la variable d'environnement "HOME"
-	home = getenv("PATH");
-	path = ft_split(home, ':');
-	while (path[i])
+	(void)sig;
+	if (sig == SIGINT)
 	{
-		printf("%s\n", path[i]);
-		i++;
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+
+int	main(void)
+{
+	struct sigaction	sa;
+	char				*input;
+
+	sa.sa_handler = handle_sigint; // Définit la fonction de gestion du signal
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;     // Redémarre readline après interruption
+	sigaction(SIGINT, &sa, NULL); // Applique le handler pour SIGINT
+	while (1)
+	{
+		input = readline("> "); // Affiche le prompt et attend une entrée
+		if (!input)
+		{ // Si Ctrl+D ou EOF, readline retourne NULL
+			printf("\nBye!\n");
+			break ;
+		}
+		if (*input)
+		{ // Ajoute la commande à l'historique si elle n'est pas vide
+			add_history(input);
+		}
+		printf("Commande entrée: %s\n", input);
+		free(input); // Libérer la mémoire allouée par readline
 	}
 	return (0);
 }
