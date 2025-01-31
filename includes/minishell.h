@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/29 15:47:14 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:49:53 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <string.h>
 # include <unistd.h>
 # include <signal.h>
+# include <fcntl.h>
+# include <sys/types.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -31,22 +33,48 @@
 # define CYAN           "\033[0;36m"
 # define RESET          "\033[0m"
 
-typedef struct s_command
-{
-	char	*name;
-	char	**options;
-	char	*arguments;
-}	t_command;
+/* COMMAND TYPES */
+# define CMD	1
+# define ARG	2
+# define PIPE	3
+# define FILE	4
+# define REDIN	5
+# define REDOUT	6
 
-typedef struct s_data
+/* MSG ERROR */
+# define ER_MALLOC "malloc error.\n"
+
+/* CODE ERROR */
+# define EXT_MALLOC 1
+
+extern pid_t	g_sigpid;
+
+typedef struct s_cmd
+{
+	bool			skip_cmd;
+	int				infile;
+	int				outfile;
+	char			**cmd_param;
+	struct s_cmd	*prev;
+	struct s_cmd	*next;
+}				t_cmd;
+
+typedef struct s_token
+{
+	char			*str;
+	int				type;
+	struct s_token	*prev;
+	struct s_token	*next;
+}				t_token;
+
+typedef struct s_shell
 {
 	char	**env;
-	char	**pwd;
-}	t_data;
-
+	char	*cmd;
+}	t_shell;
 
 /* MAIN */
-void	minishell(void);
+int		minishell(char **env);
 
 /* SIGNALS */
 void	signal_handler(int signum);
