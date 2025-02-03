@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/29 15:24:53 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/31 20:24:18 by luluzuri         ###   ########.fr       */
+/*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
+/*   Updated: 2025/02/03 16:09:20 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
+#include "minishell.h"
 
-int main() {
-    char *args[] = {"./minishell", NULL};
-    execve("./minishell", args, NULL);
-    perror("execve");
-    return 1;
+void	free_all(t_shell *shell, char *emsg, int ecode)
+{
+	
 }

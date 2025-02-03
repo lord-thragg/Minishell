@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/31 16:49:53 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/01/31 20:23:26 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <signal.h>
 # include <fcntl.h>
 # include <sys/types.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -70,7 +71,9 @@ typedef struct s_token
 typedef struct s_shell
 {
 	char	**env;
-	char	*cmd;
+	t_token	*token;
+	t_cmd	*cmd;
+	int		ecode;
 }	t_shell;
 
 /* MAIN */
