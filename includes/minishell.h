@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/06 09:53:07 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:11:43 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,12 @@
 
 /* COMMAND TYPES */
 # define CMD	1
-# define ARG	2
-# define PIPE	3
-# define FILE	4
-# define REDIN	5
-# define REDOUT	6
+# define OPT	2
+# define ARG	3
+# define PIPE	4
+# define FILE	5
+# define REDIN	6
+# define REDOUT	7
 
 /* MSG ERROR */
 # define ER_MALLOC	"malloc error.\n"
