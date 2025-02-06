@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/03 16:25:51 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/06 09:52:17 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 pid_t	g_sigpid;
 
-int	init_env(t_shell *shell, char **env)
+static int	init_env(t_shell *shell, char **env)
 {
 	char	**nenv;
 
@@ -32,7 +32,7 @@ int	init_env(t_shell *shell, char **env)
 	return (1);
 }
 
-int	init_shell(t_shell *shell, char **env)
+static int	init_shell(t_shell *shell, char **env)
 {
 	shell->token = NULL;
 	shell->cmd = NULL;
@@ -50,7 +50,7 @@ int	minishell(char **env)
 
 	set_sigact();
 	if (!init_shell(&shell, env))
-		printf("test");
+		free_all(&shell, ER_SHELL, EXT_SHELL);
 	while (1)
 	{
 		input = readline("\033[0;32mminishell\033[0m-> ");
@@ -60,8 +60,15 @@ int	minishell(char **env)
 			input = NULL;
 			break ;
 		}
-		if (*input)
+		if (input && *input)
+		{
+			if (!parsing(&shell, input))
+			{
+				rl_clear_history();
+				free_all(&shell, ER_PARSING, EXT_PARSING);
+			}
 			add_history(input);
+		}
 		g_sigpid = 0;
 	}
 	rl_clear_history();

@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/31 20:23:26 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/06 09:53:07 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,14 @@
 # define REDOUT	6
 
 /* MSG ERROR */
-# define ER_MALLOC "malloc error.\n"
+# define ER_MALLOC	"malloc error.\n"
+# define ER_SHELL	"shell error.\n"
+# define ER_PARSING	"parsing error.\n"
 
 /* CODE ERROR */
-# define EXT_MALLOC 1
+# define EXT_MALLOC 	1
+# define EXT_SHELL 		2
+# define EXT_PARSING	3
 
 extern pid_t	g_sigpid;
 
@@ -78,6 +82,12 @@ typedef struct s_shell
 
 /* MAIN */
 int		minishell(char **env);
+
+/* PARSING */
+int	parsing(t_shell *shell, char *input);
+
+/* FREE */
+void	free_all(t_shell *shell, char *emsg, int ecode);
 
 /* SIGNALS */
 void	signal_handler(int signum);

@@ -1,27 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/06 09:44:55 by luluzuri         ###   ########.fr       */
+/*   Created: 2025/02/06 09:47:11 by luluzuri          #+#    #+#             */
+/*   Updated: 2025/02/06 09:53:17 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_all(t_shell *shell, char *emsg, int ecode)
+int	parsing(t_shell *shell, char *input)
 {
-	if (shell->env && shell->env[0])
-		free_env(shell->env);
-	if (shell->token)
-		free_token(shell->token);
-	if (shell->cmd)
-		free_cmd(shell->cmd);
-	if (emsg)
-		printf("%s", emsg);
-	if (ecode != -1)
-		exit(ecode);
+	return (1);
 }
