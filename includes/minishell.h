@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/07 16:39:01 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:19:12 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,15 @@
 # define RESET          "\033[0m"
 
 /* COMMAND TYPES */
-# define CMD	1
-# define OPT	2
-# define ARG	3
-# define PIPE	4
-# define FILE	5
-# define REDIN	6
-# define REDOUT	7
+# define CMD		1
+# define OPT		2
+# define ARG		3
+# define PIPE		4
+# define FILE		5
+# define REDIN		6
+# define REDOUT		7
+# define APPEND		8
+# define HEREDOC	9
 
 /* MSG ERROR */
 # define ER_MALLOC	"malloc error.\n"

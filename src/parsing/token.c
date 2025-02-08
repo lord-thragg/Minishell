@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 16:35:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/07 16:40:34 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:20:09 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,33 @@ t_token	*create_token(char *str)
 	return (ntoken);
 }
 
+void	add_token(t_token **head, t_token *ntoken)
+{
+	t_token	*tmp;
 
+	tmp = *head;
+	if (!tmp)
+	{
+		*head = ntoken;
+		return ;
+	}
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = ntoken;
+	ntoken->prev = tmp;
+}
+
+int	detect_type(char *str)
+{
+	if (!ft_strcmp(str, "|"))
+		return (PIPE);
+	if (!ft_strcmp(str, ">"))
+		return (REDOUT);
+	if (!ft_strcmp(str, "<"))
+		return (REDIN);
+	if (!ft_strcmp(str, ">>"))
+		return (APPEND);
+	if (!ft_strcmp(str, "<<"))
+		return (HEREDOC);
+	return (ARG);
+}
