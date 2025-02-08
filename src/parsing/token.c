@@ -6,13 +6,13 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 16:35:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/08 16:20:09 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/08 21:07:16 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*create_token(char *str)
+static t_token	*create_token(char *str)
 {
 	t_token	*ntoken;
 
@@ -27,7 +27,7 @@ t_token	*create_token(char *str)
 	return (ntoken);
 }
 
-void	add_token(t_token **head, t_token *ntoken)
+static void	add_token(t_token **head, t_token *ntoken)
 {
 	t_token	*tmp;
 
@@ -43,7 +43,7 @@ void	add_token(t_token **head, t_token *ntoken)
 	ntoken->prev = tmp;
 }
 
-int	detect_type(char *str)
+static int	detect_type(char *str)
 {
 	if (!ft_strcmp(str, "|"))
 		return (PIPE);
@@ -56,4 +56,46 @@ int	detect_type(char *str)
 	if (!ft_strcmp(str, "<<"))
 		return (HEREDOC);
 	return (ARG);
+}
+
+void	free_token(t_token *head)
+{
+	t_token	*tmp;
+
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		free(tmp->str);
+		free(tmp);
+	}
+}
+
+t_token	*tokenize(char **str)
+{
+	int		i;
+	t_token	*head;
+	t_token	*ntoken;
+
+	i = 0;
+	head = NULL;
+	ntoken = NULL;
+	while (str[i])
+	{
+		ntoken = create_token(str[i]);
+		if (!ntoken)
+		{
+			perror("couldn't create the token");
+			return (NULL);
+		}
+		ntoken->type = detect_type(str[i]);
+		if (ntoken->type == ARG)
+		{
+			if (i == 0 || (head && head->type == PIPE))
+				ntoken->type = CMD;
+		}
+		add_token(&head, ntoken);
+		i++;
+	}
+	return (head);
 }

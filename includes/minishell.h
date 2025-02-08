@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/08 16:19:12 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/08 21:07:30 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,9 @@ typedef struct s_shell
 int		minishell(char **env);
 
 /* PARSING */
-int	parsing(t_shell *shell, char *input);
+int		parsing(t_shell *shell, char *input);
+t_token	*tokenize(char **str);
+void	free_token(t_token *head);
 
 /* FREE */
 void	free_all(t_shell *shell, char *emsg, int ecode);
