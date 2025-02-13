@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 16:35:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/08 21:07:16 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:28:31 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,6 @@ static int	detect_type(char *str)
 	return (ARG);
 }
 
-void	free_token(t_token *head)
-{
-	t_token	*tmp;
-
-	while (head)
-	{
-		tmp = head;
-		head = head->next;
-		free(tmp->str);
-		free(tmp);
-	}
-}
-
 t_token	*tokenize(char **str)
 {
 	int		i;
@@ -84,18 +71,14 @@ t_token	*tokenize(char **str)
 	{
 		ntoken = create_token(str[i]);
 		if (!ntoken)
-		{
-			perror("couldn't create the token");
-			return (NULL);
-		}
+			return (perror("couldn't create the token"), NULL);
 		ntoken->type = detect_type(str[i]);
 		if (ntoken->type == ARG)
-		{
 			if (i == 0 || (head && head->type == PIPE))
 				ntoken->type = CMD;
-		}
 		add_token(&head, ntoken);
 		i++;
 	}
+	free_tab(str);
 	return (head);
 }
