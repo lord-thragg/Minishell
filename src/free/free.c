@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/14 18:03:22 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:08:43 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ void	free_all(t_shell *shell, char *emsg, int ecode)
 		free_env(shell->env);*/
 	if (shell->token)
 		free_token(shell->token);
-/*	if (shell->cmd)
-		free_cmd(shell->cmd);
+	/*if (shell->cmd)
+		free_cmd(shell->cmd);*/
 	if (emsg)
-		printf("%s", emsg);*/
+		printf("%s", emsg);
 	if (ecode != -1)
 		exit(ecode);
 }
