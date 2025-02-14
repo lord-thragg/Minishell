@@ -17,9 +17,11 @@ INCDIR = includes
 
 # Source Files
 SRC_MAIN 		=	main.c minishell.c
-SRC_PARSING		=	signals/signal_handling.c
+SRC_FREE		=	free/free.c
+SRC_SIGNALS		=	signals/signal_handling.c
+SRC_PARSING		=	parsing/parsing.c parsing/token.c
 
-SRC = $(SRC_MAIN) $(SRC_PARSING)
+SRC = $(SRC_MAIN) $(SRC_FREE) $(SRC_PARSING) $(SRC_SIGNALS)
 OBJ = $(SRC:.c=.o)
 SRC := $(addprefix $(SRCDIR)/, $(SRC))
 OBJ := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(OBJ))
