@@ -1,42 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/06 09:47:11 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/16 12:41:20 by luluzuri         ###   ########.fr       */
+/*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
+/*   Updated: 2025/02/16 10:27:50 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_token(t_token *ltoken)
+int	count_token(t_token *token)
 {
+	int		i;
 	t_token	*tmp;
 
-	tmp = ltoken;
+	i = 0;
+	tmp = token;
 	while (tmp)
 	{
-		printf("str: %s\ttype: %d\n", tmp->str, tmp->type);
+		i++;
 		tmp = tmp->next;
 	}
+	return (i);
 }
 
-int	parsing(t_shell *shell, char *input)
+t_cmd	*token_to_command(t_token *token)
 {
-	char	**splitted;
-
-	splitted = ft_split(input, ' ');
-	if (!splitted)
-		return (0);
-	shell->token = tokenize(splitted);
-	if (!shell->token)
-		return (0);
-	print_token(shell->token);
-	/*shell->cmd = token_to_command(shell->token);
-	if (!shell->cmd)
-		return (0);*/
-	return (1);
+	t_cmd	*head;
 }

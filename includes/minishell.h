@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/14 17:15:28 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/16 10:15:06 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # define REDOUT		7
 # define APPEND		8
 # define HEREDOC	9
+//# define SPACE		10
 
 /* MSG ERROR */
 # define ER_MALLOC	"malloc error.\n"

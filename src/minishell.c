@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/14 18:07:25 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:10:17 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,5 @@ int	minishell(char **env)
 		g_sigpid = 0;
 	}
 	rl_clear_history();
-	//free_all(&shell, NULL, -1);
 	return (0);
 }
