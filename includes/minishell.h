@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/16 10:15:06 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/18 08:58:10 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_cmd
 	bool			skip_cmd;
 	int				infile;
 	int				outfile;
-	char			**cmd_param;
+	char			**cmd_list;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }				t_cmd;
@@ -91,6 +91,7 @@ int		minishell(char **env);
 /* PARSING */
 int		parsing(t_shell *shell, char *input);
 t_token	*tokenize(char **str);
+t_cmd	*token_to_command(t_token *token);
 
 /* FREE */
 void	free_all(t_shell *shell, char *emsg, int ecode);

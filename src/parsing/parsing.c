@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 09:47:11 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/16 12:41:20 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/18 08:16:53 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	parsing(t_shell *shell, char *input)
 	if (!shell->token)
 		return (0);
 	print_token(shell->token);
-	/*shell->cmd = token_to_command(shell->token);
+	shell->cmd = token_to_command(shell->token);
 	if (!shell->cmd)
-		return (0);*/
+		return (0);
 	return (1);
 }
