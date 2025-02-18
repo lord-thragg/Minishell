@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/18 09:40:57 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:49:45 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,25 @@ t_cmd	*token_to_command(t_token *token)
 			if (!ncmd->cmd_list[i])
 				return (NULL);
 			i++;
+		}
+		if (token->type == REDIN)
+		{
+			// ouvrir le fd en recuperant le nom de fichier ( token suivant ) et l'enregistrer dans la cmd
+			// Ouverture en ecriture ( doit overwrite )
+		}
+		if (token->type == REDOUT)
+		{
+			// ouvrir le fd en recuperant le nom de fichier ( token suivant ) et l'enregistrer dans la cmd
+			// Ouverture en lecture seulement
+		}
+		if (token->type == APPEND)
+		{
+			// ouvrir le fd en recuperant le nom de fichier ( token suivant ) et l'enregistrer dans la cmd
+			// Ouverture en ecriture ( APPEND )
+		}
+		if (token->type == HEREDOC)
+		{
+			// A voir avec lucas
 		}
 		if (token->type == PIPE)
 		{

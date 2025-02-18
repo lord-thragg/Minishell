@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/18 10:02:06 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:45:02 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,13 @@
 
 /* COMMAND TYPES */
 # define CMD		1
-# define OPT		2
-# define ARG		3
-# define PIPE		4
-# define FILE		5
-# define REDIN		6
-# define REDOUT		7
-# define APPEND		8
-# define HEREDOC	9
+# define ARG		2
+# define PIPE		3
+# define FILE		4
+# define REDIN		5
+# define REDOUT		6
+# define APPEND		7
+# define HEREDOC	8
 //# define SPACE		10
 
 /* MSG ERROR */
