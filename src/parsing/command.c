@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/18 09:02:36 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/18 09:40:57 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 	return (i);
 }*/
 
-void	add_cmd(t_cmd **head, t_cmd *ncmd)
+static void	add_cmd(t_cmd **head, t_cmd *ncmd)
 {
 	t_cmd	*tmp;
 
@@ -43,6 +43,24 @@ void	add_cmd(t_cmd **head, t_cmd *ncmd)
 	ncmd->prev = tmp;
 }
 
+static t_cmd	*create_cmd(t_cmd *ncmd)
+{
+	if (ncmd)
+		return (ncmd);
+	ncmd = (t_cmd *)malloc(sizeof(t_cmd));
+	if (ncmd == NULL)
+		return (NULL);
+	ncmd->cmd_list = (char *)malloc(2 * sizeof(char));
+	if (!ncmd->cmd_list)
+		return (NULL);
+	return (ncmd);
+}
+
+static void	*detect_type(t_cmd **cmd, t_token *token)
+{
+	
+}
+
 t_cmd	*token_to_command(t_token *token)
 {
 	t_cmd	*head;
@@ -54,17 +72,21 @@ t_cmd	*token_to_command(t_token *token)
 	ncmd = NULL;
 	while (token)
 	{
+		ncmd = create_cmd(ncmd);
 		if (!ncmd)
+			return (NULL);
+		if (token->type == CMD)
 		{
-			ncmd = (t_cmd *)malloc(sizeof(t_cmd));
-			if (ncmd == NULL)
+			ncmd->cmd_list[i] = ft_strdup(token->str);
+			if (!ncmd->cmd_list[i])
 				return (NULL);
-			ncmd->cmd_list = (char *)malloc(2 * sizeof(char));
-			if (!ncmd->cmd_list)
-				return (NULL);
+			i++;
 		}
 		if (token->type == PIPE)
+		{
 			add_cmd(&head, ncmd);
+			ncmd = NULL;
+		}
 	}
 	free_token(token);
 	return (head);

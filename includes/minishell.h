@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/18 08:58:10 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:02:06 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ typedef struct s_shell
 }	t_shell;
 
 /* MAIN */
-int		minishell(char **env);
+int		minishell(char **env, t_shell shell);
 
 /* PARSING */
 int		parsing(t_shell *shell, char *input);

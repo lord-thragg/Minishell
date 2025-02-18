@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/14 18:10:17 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:01:24 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ static int	init_shell(t_shell *shell, char **env)
 	return (1);
 }
 
-int	minishell(char **env)
+int	minishell(char **env, t_shell shell)
 {
-	t_shell	shell;
 	char	*input;
 
 	set_sigact();
@@ -63,10 +62,7 @@ int	minishell(char **env)
 		if (input && *input)
 		{
 			if (!parsing(&shell, input))
-			{
-				rl_clear_history();
 				free_all(&shell, ER_PARSING, EXT_PARSING);
-			}
 			add_history(input);
 			free_all(&shell, NULL, -1);
 		}
