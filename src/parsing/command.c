@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/19 10:53:32 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:35:00 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 {
 	int		i;
 	t_token	*tmp;
+	t_cmd	*tmp;
 
 	i = 0;
 	tmp = token;
@@ -26,10 +27,9 @@
 	}
 	return (i);
 }*/
-
 static void	add_cmd(t_cmd **head, t_cmd *ncmd)
 {
-	t_cmd	*tmp;
+	t_token	*tmp;
 
 	tmp = *head;
 	if (!tmp)
@@ -56,59 +56,24 @@ static t_cmd	*create_cmd(t_cmd *ncmd)
 	return (ncmd);
 }
 
-static void	*detect_type(t_cmd **head, t_cmd *cmd, t_token *token)
-{
-	if (token->type == CMD)
-		{
-			ncmd->cmd_list[i] = ft_strdup(token->str);
-			if (!ncmd->cmd_list[i])
-				return (NULL);
-			i++;
-		}
-		if (token->type == REDIN)
-		{
-			token->next;// ouvrir le fd en recuperant le nom de fichier ( token suivant ) et l'enregistrer dans la cmd
-			// Ouverture en ecriture ( doit overwrite )
-		}
-		if (token->type == REDOUT)
-		{
-			// ouvrir le fd en recuperant le nom de fichier ( token suivant ) et l'enregistrer dans la cmd
-			// Ouverture en lecture seulement
-		}
-		if (token->type == APPEND)
-		{
-			// ouvrir le fd en recuperant le nom de fichier ( token suivant ) et l'enregistrer dans la cmd
-			// Ouverture en ecriture ( APPEND )
-		}
-		if (token->type == HEREDOC)
-		{
-			// A voir avec lucas
-		}
-		if (token->type == PIPE)
-		{
-			add_cmd(&head, ncmd);
-			ncmd = NULL;
-		}
-}
-
 t_cmd	*token_to_command(t_token *token)
 {
 	t_cmd	*head;
 	t_cmd	*ncmd;
+	t_token	*tmp;
 	int		i;
 
 	i = 0;
 	head = NULL;
 	ncmd = NULL;
-	while (token)
+	tmp = token;
+	while (tmp)
 	{
 		ncmd = create_cmd(ncmd);
 		if (!ncmd)
 			return (NULL);
-		token = detect_type(head, ncmd, token);
-		if (!token)
-			return (NULL);
-		token = token->next;
+		tmp = detect_type(head, ncmd, tmp);
+		tmp = tmp->next;
 	}
 	free_token(token);
 	return (head);
