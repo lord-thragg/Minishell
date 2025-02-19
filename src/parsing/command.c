@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/18 10:49:45 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/19 10:53:32 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,26 +56,9 @@ static t_cmd	*create_cmd(t_cmd *ncmd)
 	return (ncmd);
 }
 
-static void	*detect_type(t_cmd **cmd, t_token *token)
+static void	*detect_type(t_cmd **head, t_cmd *cmd, t_token *token)
 {
-	
-}
-
-t_cmd	*token_to_command(t_token *token)
-{
-	t_cmd	*head;
-	t_cmd	*ncmd;
-	int		i;
-
-	i = 0;
-	head = NULL;
-	ncmd = NULL;
-	while (token)
-	{
-		ncmd = create_cmd(ncmd);
-		if (!ncmd)
-			return (NULL);
-		if (token->type == CMD)
+	if (token->type == CMD)
 		{
 			ncmd->cmd_list[i] = ft_strdup(token->str);
 			if (!ncmd->cmd_list[i])
@@ -84,7 +67,7 @@ t_cmd	*token_to_command(t_token *token)
 		}
 		if (token->type == REDIN)
 		{
-			// ouvrir le fd en recuperant le nom de fichier ( token suivant ) et l'enregistrer dans la cmd
+			token->next;// ouvrir le fd en recuperant le nom de fichier ( token suivant ) et l'enregistrer dans la cmd
 			// Ouverture en ecriture ( doit overwrite )
 		}
 		if (token->type == REDOUT)
@@ -106,6 +89,26 @@ t_cmd	*token_to_command(t_token *token)
 			add_cmd(&head, ncmd);
 			ncmd = NULL;
 		}
+}
+
+t_cmd	*token_to_command(t_token *token)
+{
+	t_cmd	*head;
+	t_cmd	*ncmd;
+	int		i;
+
+	i = 0;
+	head = NULL;
+	ncmd = NULL;
+	while (token)
+	{
+		ncmd = create_cmd(ncmd);
+		if (!ncmd)
+			return (NULL);
+		token = detect_type(head, ncmd, token);
+		if (!token)
+			return (NULL);
+		token = token->next;
 	}
 	free_token(token);
 	return (head);

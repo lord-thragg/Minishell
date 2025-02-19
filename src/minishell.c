@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/18 10:01:24 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/19 10:52:21 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static int	init_env(t_shell *shell, char **env)
 
 static int	init_shell(t_shell *shell, char **env)
 {
+	set_sigact();
 	shell->token = NULL;
 	shell->cmd = NULL;
 	shell->ecode = 0;
@@ -43,11 +44,11 @@ static int	init_shell(t_shell *shell, char **env)
 	return (1);
 }
 
-int	minishell(char **env, t_shell shell)
+int	minishell(char **env)
 {
+	t_shell	shell;
 	char	*input;
 
-	set_sigact();
 	if (!init_shell(&shell, env))
 		free_all(&shell, ER_SHELL, EXT_SHELL);
 	while (1)

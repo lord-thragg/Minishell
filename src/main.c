@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:27:46 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/18 10:01:53 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/19 10:52:11 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int	main(int ac, char **av, char **env)
 {
-	t_shell	shell;
-
 	(void)ac;
 	(void)av;
 	printf(CYAN"\
@@ -26,6 +24,6 @@ int	main(int ac, char **av, char **env)
 \t██║ ╚═╝ ██║██║██║ ╚████║██║███████║██║  ██║███████╗███████╗███████╗ \n\
 \t╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ \n\
 \n"RESET);
-	minishell(env, shell);
+	minishell(env);
 	return (0);
 }
