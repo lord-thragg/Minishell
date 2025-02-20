@@ -19,7 +19,7 @@ INCDIR = includes
 SRC_MAIN 		=	main.c minishell.c
 SRC_FREE		=	free/free.c
 SRC_SIGNALS		=	signals/signal_handling.c
-SRC_PARSING		=	parsing/parsing.c parsing/command.c parsing/token.c
+SRC_PARSING		=	parsing/parsing.c parsing/command.c parsing/token.c parsing/utils_commands.c
 
 SRC = $(SRC_MAIN) $(SRC_FREE) $(SRC_PARSING) $(SRC_SIGNALS)
 OBJ = $(SRC:.c=.o)

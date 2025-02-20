@@ -6,11 +6,24 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/19 10:53:16 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:33:49 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_cmd(t_cmd *head)
+{
+	t_cmd	*tmp;
+
+	while (!head)
+	{
+		tmp = head;
+		head = head->next;
+		free_tab(tmp->cmd_list);
+		free(tmp);
+	}
+}
 
 void	free_tab(char **str)
 {
@@ -26,7 +39,7 @@ void	free_token(t_token *head)
 {
 	t_token	*tmp;
 
-	while (head != NULL)
+	while (head)
 	{
 		tmp = head;
 		head = head->next;

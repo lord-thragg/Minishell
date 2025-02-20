@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 16:35:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/18 10:51:13 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:00:51 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,6 @@ t_token	*tokenize(char **str)
 		if (ntoken->type == ARG)
 			if (i == 0 || (get_last_type(head) == PIPE))
 				ntoken->type = CMD;
-		if (token->type == APPEND || token->type == REDIN || token->type == REDOUT)
-		{
-			
-		}
 		add_token(&head, ntoken);
 		i++;
 	}
