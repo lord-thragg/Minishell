@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/20 14:11:05 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/22 13:27:53 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,10 @@ extern pid_t	g_sigpid;
 
 typedef struct s_cmd
 {
+	bool			append;
 	bool			skip_cmd;
-	int				infile;
-	int				outfile;
+	char			*infile;
+	char			*outfile;
 	char			**cmd_list;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
@@ -91,7 +92,7 @@ int		minishell(char **env);
 int		parsing(t_shell *shell, char *input);
 t_token	*tokenize(char **str);
 t_cmd	*token_to_command(t_token *token);
-t_token	*typing(t_cmd **head, t_cmd *cmd, t_token *token);
+t_token	*determine_type(t_cmd **head, t_cmd *cmd, t_token *token);
 
 /* FREE */
 void	free_all(t_shell *shell, char *emsg, int ecode);

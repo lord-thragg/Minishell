@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/20 14:33:49 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/22 13:26:50 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	free_token(t_token *head)
 		free(tmp->str);
 		free(tmp);
 	}
+	head = NULL;
 }
 
 void	free_all(t_shell *shell, char *emsg, int ecode)

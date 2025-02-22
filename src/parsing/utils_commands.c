@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 16:22:15 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/20 14:22:33 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/22 15:18:51 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,18 @@ static void	add_cmd(t_cmd **head, t_cmd *ncmd)
 	ncmd->prev = tmp;
 }
 
-t_token	*to_change(t_cmd *cmd, t_token *token)
+static t_token	*name_to_change(t_cmd *cmd, t_token *token)
 {
-	(void)cmd;
+	if (token->type == REDOUT || token->type == APPEND)
+	{
+		cmd->outfile = ft_strdup(token->next->str);
+		if (token->type == APPEND)
+			cmd->append = true;
+		return (token->next);
+	}
 	if (token->type == REDIN)
 	{
-		printf("token->type == REDIN");
-		return (token->next);
-	}
-	if (token->type == REDOUT)
-	{
-		printf("token->type == REDOUT");
-		return (token->next);
-	}
-	if (token->type == APPEND)
-	{
-		printf("token->type == APPEND");
+		cmd->infile = ft_strdup(token->next->str);
 		return (token->next);
 	}
 	if (token->type == HEREDOC)
@@ -53,7 +49,7 @@ t_token	*to_change(t_cmd *cmd, t_token *token)
 	return (NULL);
 }
 
-t_token	*typing(t_cmd **head, t_cmd *cmd, t_token *token)
+t_token	*determine_type(t_cmd **head, t_cmd *cmd, t_token *token)
 {
 	t_token	*tmp;
 
@@ -65,7 +61,7 @@ t_token	*typing(t_cmd **head, t_cmd *cmd, t_token *token)
 			return (NULL);
 		return (token);
 	}
-	tmp = to_change(cmd, token);
+	tmp = name_to_change(cmd, token);
 	if (tmp)
 		return (tmp);
 	if (token->type == PIPE || token->next == NULL)
