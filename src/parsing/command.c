@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 14:14:53 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 17:07:55 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,22 +73,24 @@ static t_cmd	*create_cmd(t_cmd *ncmd, t_token *token)
 
 t_cmd	*token_to_command(t_token *token)
 {
+	t_token	*tmp;
 	t_cmd	*head;
 	t_cmd	*ncmd;
 
 	head = NULL;
 	ncmd = NULL;
-	while (token)
+	tmp = token;
+	while (tmp)
 	{
-		ncmd = create_cmd(ncmd, token);
+		ncmd = create_cmd(ncmd, tmp);
 		if (!ncmd)
 			return (NULL);
-		token = determine_type(&head, &ncmd, token);
-		if (!token)
+		tmp = determine_type(&head, &ncmd, tmp);
+		if (!tmp)
 			return (NULL);
-		token = token->next;
+		tmp = tmp->next;
 	}
-	if (token == NULL)
+	if (tmp == NULL)
 	{
 		add_cmd(&head, ncmd);
 		ncmd = NULL;

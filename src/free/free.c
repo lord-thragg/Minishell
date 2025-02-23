@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 14:06:18 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 17:05:50 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	free_token(t_token *head)
 	{
 		tmp = head;
 		head = head->next;
-		free(tmp->str);
+		if (tmp->str)
+			free(tmp->str);
 		free(tmp);
 	}
 	head = NULL;
@@ -46,22 +47,22 @@ void	free_token(t_token *head)
 
 void	free_cmd(t_cmd *head)
 {
-    t_cmd	*tmp;
+	t_cmd	*tmp;
 
-    while (head)
-    {
-        tmp = head;
-        head = head->next;
-        if (tmp->cmd_list)
-            free_tab(tmp->cmd_list);
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		if (tmp->cmd_list)
+			free_tab(tmp->cmd_list);
 		if (tmp->infile)
-            free(tmp->infile);
+			free(tmp->infile);
 		if (tmp->outfile)
-            free(tmp->outfile);
-        free(tmp);
-        tmp = NULL;
-    }
-    head = NULL;
+			free(tmp->outfile);
+		free(tmp);
+		tmp = NULL;
+	}
+	head = NULL;
 }
 
 void	free_all(t_shell *shell, char *emsg, int ecode)
