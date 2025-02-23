@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 12:02:28 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 14:14:53 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,15 @@ t_cmd	*token_to_command(t_token *token)
 		ncmd = create_cmd(ncmd, token);
 		if (!ncmd)
 			return (NULL);
-		token = determine_type(&head, ncmd, token);
+		token = determine_type(&head, &ncmd, token);
 		if (!token)
 			return (NULL);
 		token = token->next;
+	}
+	if (token == NULL)
+	{
+		add_cmd(&head, ncmd);
+		ncmd = NULL;
 	}
 	free_token(token);
 	return (head);

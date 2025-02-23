@@ -6,13 +6,25 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 13:18:50 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 10:34:56 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 14:07:24 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_token(t_token *ltoken)
+static void	print_cmd(t_cmd *cmd)
+{
+	t_cmd	*tmp;
+
+	tmp = cmd;
+	while (tmp)
+	{
+		printf("str: %s\n", tmp->cmd_list[0]);
+		tmp = tmp->next;
+	}
+}
+
+/*static void	print_token(t_token *ltoken)
 {
 	t_token	*tmp;
 
@@ -22,7 +34,7 @@ static void	print_token(t_token *ltoken)
 		printf("str: %s\ttype: %d\n", tmp->str, tmp->type);
 		tmp = tmp->next;
 	}
-}
+}*/
 
 int	parsing(t_shell *shell, char *input)
 {
@@ -34,10 +46,11 @@ int	parsing(t_shell *shell, char *input)
 	shell->token = tokenize(splitted);
 	if (!shell->token)
 		return (0);
-	print_token(shell->token);
+	//print_token(shell->token);
 	shell->cmd = token_to_command(shell->token);
 	if (!shell->cmd)
 		return (0);
 	shell->token = NULL;
+	print_cmd(shell->cmd);
 	return (1);
 }

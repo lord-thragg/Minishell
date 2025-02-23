@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 11:53:04 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 14:06:18 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,24 @@ void	free_tab(char **str)
 {
 	int	i;
 
-	i = -1;
-	while (str && str[++i])
+	i = 0;
+	while (str && str[i])
 	{
-		printf("test -> %s\n", str[i]);
 		free(str[i]);
 		str[i] = NULL;
+		i++;
 	}
-	free(str);
-	str = NULL;
+	if (str)
+	{
+		free(str);
+		str = NULL;
+	}
 }
 
 void	free_token(t_token *head)
 {
 	t_token	*tmp;
-	
+
 	while (head)
 	{
 		tmp = head;
@@ -50,15 +53,13 @@ void	free_cmd(t_cmd *head)
         tmp = head;
         head = head->next;
         if (tmp->cmd_list)
-		{
             free_tab(tmp->cmd_list);
-		}
-			if (tmp->infile)
+		if (tmp->infile)
             free(tmp->infile);
-        if (tmp->outfile)
+		if (tmp->outfile)
             free(tmp->outfile);
         free(tmp);
-        tmp = NULL; // Ensure tmp is not accessed after being freed
+        tmp = NULL;
     }
     head = NULL;
 }

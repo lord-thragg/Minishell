@@ -6,13 +6,13 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 16:22:15 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 12:07:05 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 14:15:20 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	add_cmd(t_cmd **head, t_cmd *ncmd)
+void	add_cmd(t_cmd **head, t_cmd *ncmd)
 {
 	t_cmd	*tmp;
 
@@ -73,29 +73,28 @@ t_token	*arg_type(t_cmd **cmd, t_token *token)
 	return (token);
 }
 
-t_token	*determine_type(t_cmd **head, t_cmd *cmd, t_token *token)
+t_token	*determine_type(t_cmd **head, t_cmd **cmd, t_token *token)
 {
 	t_token	*tmp;
 
 	tmp = NULL;
 	if (token->type == CMD)
 	{
-		cmd->cmd_list[0] = ft_strdup(token->str);
-		if (!cmd->cmd_list[0])
+		(*cmd)->cmd_list[0] = ft_strdup(token->str);
+		if (!(*cmd)->cmd_list[0])
 			return (NULL);
 		return (token);
 	}
 	if (token->type == ARG)
-		return (arg_type(&cmd, token));
-	tmp = file_type(cmd, token);
+		return (arg_type(cmd, token));
+	tmp = file_type(*cmd, token);
 	if (tmp)
 		return (tmp);
 	if (token->type == PIPE || token->next == NULL)
 	{
-		add_cmd(head, cmd);
-		cmd = NULL;
+		add_cmd(head, *cmd);
+		(*cmd) = NULL;
 		return (token);
 	}
-	printf("la cmd = %s\n", cmd->cmd_list[0]);
 	return (NULL);
 }

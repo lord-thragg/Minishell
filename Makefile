@@ -40,7 +40,7 @@ ARFLAGS = rcs
 
 # Compiler and Flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -g3 -I$(LIBFT_INCLUDE)
+CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -g3 -I$(LIBFT_INCLUDE) 
 
 # Compilation mode
 VERBOSE ?= 0

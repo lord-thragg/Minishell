@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 09:22:23 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 14:13:57 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,10 @@ int		minishell(char **env);
 
 /* PARSING */
 int		parsing(t_shell *shell, char *input);
+void	add_cmd(t_cmd **head, t_cmd *ncmd);
 t_token	*tokenize(char **str);
 t_cmd	*token_to_command(t_token *token);
-t_token	*determine_type(t_cmd **head, t_cmd *cmd, t_token *token);
+t_token	*determine_type(t_cmd **head, t_cmd **cmd, t_token *token);
 
 /* FREE */
 void	free_all(t_shell *shell, char *emsg, int ecode);
