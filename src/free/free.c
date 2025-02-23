@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 10:51:52 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 11:53:04 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	free_tab(char **str)
 	i = -1;
 	while (str && str[++i])
 	{
+		printf("test -> %s\n", str[i]);
 		free(str[i]);
 		str[i] = NULL;
 	}
@@ -49,8 +50,10 @@ void	free_cmd(t_cmd *head)
         tmp = head;
         head = head->next;
         if (tmp->cmd_list)
+		{
             free_tab(tmp->cmd_list);
-        if (tmp->infile)
+		}
+			if (tmp->infile)
             free(tmp->infile);
         if (tmp->outfile)
             free(tmp->outfile);
@@ -63,11 +66,11 @@ void	free_cmd(t_cmd *head)
 void	free_all(t_shell *shell, char *emsg, int ecode)
 {
 	if (shell->token)
-	free_token(shell->token);
+		free_token(shell->token);
 	if (shell->cmd)
-	free_cmd(shell->cmd);
+		free_cmd(shell->cmd);
 	if (emsg)
-	printf("%s", emsg);
+		printf("%s", emsg);
 	if (ecode != -1)
 	{
 		/*if (shell->env && shell->env[0])

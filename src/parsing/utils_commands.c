@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 16:22:15 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 10:45:48 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 12:07:05 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,6 @@ t_token	*determine_type(t_cmd **head, t_cmd *cmd, t_token *token)
 		cmd = NULL;
 		return (token);
 	}
+	printf("la cmd = %s\n", cmd->cmd_list[0]);
 	return (NULL);
 }
