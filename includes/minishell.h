@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/22 13:27:53 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 09:22:23 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@
 
 extern pid_t	g_sigpid;
 
-typedef struct s_cmd
-{
+typedef struct s_cmd {
 	bool			append;
 	bool			skip_cmd;
 	char			*infile;
@@ -69,16 +68,14 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }				t_cmd;
 
-typedef struct s_token
-{
+typedef struct s_token {
 	char			*str;
 	int				type;
 	struct s_token	*prev;
 	struct s_token	*next;
 }				t_token;
 
-typedef struct s_shell
-{
+typedef struct s_shell {
 	char	**env;
 	t_token	*token;
 	t_cmd	*cmd;
@@ -97,6 +94,7 @@ t_token	*determine_type(t_cmd **head, t_cmd *cmd, t_token *token);
 /* FREE */
 void	free_all(t_shell *shell, char *emsg, int ecode);
 void	free_token(t_token *head);
+void	free_cmd(t_cmd *head);
 void	free_tab(char **str);
 
 /* SIGNALS */

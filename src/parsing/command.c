@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/22 15:51:47 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 10:43:56 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@
 	return (i);
 }*/
 
-int	count_heredoc(t_token *token)
+static int	cheredoc(t_token *token)
 {
 	t_token	*tmp;
 	int		count;
 
 	count = 0;
 	tmp = token;
-	while (token)
+	while (tmp)
 	{
 		if (tmp->type == HEREDOC)
 			count++;
@@ -46,15 +46,22 @@ int	count_heredoc(t_token *token)
 
 static t_cmd	*create_cmd(t_cmd *ncmd, t_token *token)
 {
+	int	i;
+
+	i = 0;
 	if (ncmd)
 		return (ncmd);
 	ncmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (ncmd == NULL)
+	if (!ncmd)
 		return (NULL);
-	ncmd->cmd_list = (char **)malloc((3 + count_heredoc(token)) \
-										* sizeof(char *));
+	ncmd->cmd_list = (char **)malloc((3 + cheredoc(token)) * sizeof(char *));
 	if (!ncmd->cmd_list)
 		return (NULL);
+	while (i < (3 + cheredoc(token)))
+	{
+		ncmd->cmd_list[i] = NULL;
+		i++;
+	}
 	ncmd->skip_cmd = NULL;
 	ncmd->append = false;
 	ncmd->infile = NULL;

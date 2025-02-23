@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 16:22:15 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/22 15:18:51 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/23 10:45:48 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	add_cmd(t_cmd **head, t_cmd *ncmd)
 	ncmd->prev = tmp;
 }
 
-static t_token	*name_to_change(t_cmd *cmd, t_token *token)
+static t_token	*file_type(t_cmd *cmd, t_token *token)
 {
 	if (token->type == REDOUT || token->type == APPEND)
 	{
@@ -49,6 +49,30 @@ static t_token	*name_to_change(t_cmd *cmd, t_token *token)
 	return (NULL);
 }
 
+t_token	*arg_type(t_cmd **cmd, t_token *token)
+{
+	t_cmd	*tmp;
+	char	*tmp_str;
+
+	tmp = *cmd;
+	if (tmp->cmd_list[1] && tmp->cmd_list[1][0])
+	{
+		tmp_str = ft_strjoin(tmp->cmd_list[1], token->str);
+		if (!tmp_str)
+			return (NULL);
+		free(tmp->cmd_list[1]);
+		tmp->cmd_list[1] = tmp_str;
+	}
+	else
+	{
+		tmp->cmd_list[1] = ft_strdup(token->str);
+		if (!tmp->cmd_list[1])
+			return (NULL);
+	}
+	cmd = &tmp;
+	return (token);
+}
+
 t_token	*determine_type(t_cmd **head, t_cmd *cmd, t_token *token)
 {
 	t_token	*tmp;
@@ -61,7 +85,9 @@ t_token	*determine_type(t_cmd **head, t_cmd *cmd, t_token *token)
 			return (NULL);
 		return (token);
 	}
-	tmp = name_to_change(cmd, token);
+	if (token->type == ARG)
+		return (arg_type(&cmd, token));
+	tmp = file_type(cmd, token);
 	if (tmp)
 		return (tmp);
 	if (token->type == PIPE || token->next == NULL)
