@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 13:18:50 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 14:07:24 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/24 08:48:51 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 static void	print_cmd(t_cmd *cmd)
 {
 	t_cmd	*tmp;
+	int		i;
 
 	tmp = cmd;
 	while (tmp)
 	{
-		printf("str: %s\n", tmp->cmd_list[0]);
+		i = -1;
+		while (tmp->cmd_list[++i])
+			printf("args [%d] -> %s\n", i, cmd->cmd_list[i]);
 		tmp = tmp->next;
 	}
 }

@@ -6,27 +6,11 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 17:07:55 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/24 09:01:13 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*static int	count_token(t_token *token)
-{
-	int		i;
-	t_token	*tmp;
-	t_cmd	*tmp;
-
-	i = 0;
-	tmp = token;
-	while (tmp)
-	{
-		i++;
-		tmp = tmp->next;
-	}
-	return (i);
-}*/
 
 static int	cheredoc(t_token *token)
 {

@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 16:22:15 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 14:15:20 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/24 09:01:39 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ void	add_cmd(t_cmd **head, t_cmd *ncmd)
 
 static t_token	*file_type(t_cmd *cmd, t_token *token)
 {
+	int	i;
+
+	i = 1;
 	if (token->type == REDOUT || token->type == APPEND)
 	{
 		cmd->outfile = ft_strdup(token->next->str);
@@ -44,7 +47,10 @@ static t_token	*file_type(t_cmd *cmd, t_token *token)
 	}
 	if (token->type == HEREDOC)
 	{
-		printf("token->type == HEREDOC");
+		while (cmd->cmd_list[i])
+			i++;
+		cmd->cmd_list[i] = ft_strdup(token->next->str);
+		return (token->next);
 	}
 	return (NULL);
 }
