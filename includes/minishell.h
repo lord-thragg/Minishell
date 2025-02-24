@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/23 14:13:57 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:03:06 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_cmd {
 	char			*infile;
 	char			*outfile;
 	char			**cmd_list;
+	char			**limiter;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }				t_cmd;
