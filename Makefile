@@ -17,9 +17,16 @@ INCDIR = includes
 
 # Source Files
 SRC_MAIN 		=	main.c minishell.c
-SRC_PARSING		=	signals/signal_handling.c
+SRC_ENV 		=	env/ft_getenv.c
+SRC_BULTIN		=	builtin/echo.c builtin/env.c builtin/export.c builtin/cd.c
+SRC_FREE		=	free/free.c
+SRC_SIGNALS		=	signals/signal_handling.c
+SRC_PARSING		=	parsing/parsing.c parsing/command.c parsing/token.c parsing/utils_commands.c
+SRC_EXEC		=	execution/execution.c execution/loop_execution.c \
+					execution/files_manager.c execution/here_docs_utils.c \
+					execution/here_doc_handle.c execution/print_errors.c
 
-SRC = $(SRC_MAIN) $(SRC_PARSING)
+SRC = $(SRC_MAIN) $(SRC_FREE) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_ENV) $(SRC_BULTIN) $(SRC_EXEC)
 OBJ = $(SRC:.c=.o)
 SRC := $(addprefix $(SRCDIR)/, $(SRC))
 OBJ := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(OBJ))
@@ -38,7 +45,7 @@ ARFLAGS = rcs
 
 # Compiler and Flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -g3 -I$(LIBFT_INCLUDE)
+CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -g3 -I$(LIBFT_INCLUDE) 
 
 # Compilation mode
 VERBOSE ?= 0

@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   print_errors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/21 11:57:00 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/01/21 12:02:53 by lle-duc          ###   ########.fr       */
+/*   Created: 2025/02/27 16:18:18 by lle-duc           #+#    #+#             */
+/*   Updated: 2025/02/27 16:44:22 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(int ac, char **av, char  **env)
+void    print_no_file_error(char *cmd, char *file, int issue)
 {
-    int i = 0;
-
-    (void)ac;
-    (void)av;
-    while (env[i])
+    if (issue)
     {
-        printf("%s\n", env[i]);
-        i++;
+        perror(cmd);
+        perror(": ");
+        perror(file);
+        perror("Permission denied");
+    }
+    else
+    {
+        perror(cmd);
+        perror(": ");
+        perror(file);
+        perror(": No such file or directory");
     }
 }

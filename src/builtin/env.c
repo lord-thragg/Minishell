@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/21 08:18:22 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/01/21 08:26:18 by luluzuri         ###   ########.fr       */
+/*   Created: 2025/01/21 11:57:00 by lle-duc           #+#    #+#             */
+/*   Updated: 2025/02/26 17:18:25 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-//#include "minishell.h"
+#include "minishell.h"
 
-int	main(void)
+void	ft_env(t_shell *shell)
 {
-	char	cwd[1024];
+	int	i;
 
-	printf("%s\n", getcwd(cwd, sizeof(cwd)));
+	i = 0;
+	while (shell->env[i])
+	{
+		printf("%s\n", shell->env[i]);
+		i++;
+	}
+	exit(0);
 }
