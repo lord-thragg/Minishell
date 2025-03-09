@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/27 21:33:12 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 08:16:33 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ static t_cmd	*create_cmd(t_cmd *ncmd, t_token *token)
 	ncmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!ncmd)
 		return (NULL);
-	ncmd->cmd_list = (char **)malloc(3 * sizeof(char *));
+	ncmd->cmd_list = (char **)malloc((ctoken(token) + 1) * sizeof(char *));
 	if (!ncmd->cmd_list)
 		return (NULL);
-	put_null(ncmd->cmd_list, 3);
-	ncmd->limiters = (char **)malloc((ctype(token, HEREDOC) + 1) \
-	* sizeof(char *));
+	put_null(ncmd->cmd_list, ctoken(token) + 1);
+	ncmd->limiters = (char **)malloc((ctype(token, HEREDOC) + 1)
+			* sizeof(char *));
 	if (!ncmd->limiters)
 		return (NULL);
 	put_null(ncmd->limiters, ctype(token, HEREDOC) + 1);
@@ -73,7 +73,6 @@ static t_cmd	*create_cmd(t_cmd *ncmd, t_token *token)
 	if (!ncmd->infile)
 		return (NULL);
 	ncmd->append = false;
-	ncmd->prev = NULL;
 	ncmd->next = NULL;
 	return (ncmd);
 }
@@ -100,7 +99,6 @@ t_cmd	*token_to_command(t_token *token)
 	if (tmp == NULL)
 	{
 		add_cmd(&head, ncmd);
-		ncmd = NULL;
 	}
 	free_token(token);
 	return (head);

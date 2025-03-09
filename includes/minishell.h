@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/27 22:28:40 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/09 08:26:34 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ typedef struct s_cmd
 	char			**outfile;
 	char			**cmd_list;
 	char			**limiters;
-	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -97,15 +96,23 @@ int					minishell(char **env);
 /* PARSING */
 int					parsing(t_shell *shell, char *input);
 void				add_cmd(t_cmd **head, t_cmd *ncmd);
+int					ctoken(t_token *tok);
 t_token				*tokenize(char **str);
 t_cmd				*token_to_command(t_token *token);
 t_token				*determine_type(t_cmd **head, t_cmd **cmd, t_token *token);
+char				**ft_splitspace(char const *s);
+size_t				advance_to_next_segment(const char *s, char c, size_t i,
+						int *in_quote);
+size_t				advance_through_segment(const char *s, char c, size_t i,
+						int *in_quote);
 
 /* FREE */
 void				free_all(t_shell *shell, char *emsg, int ecode);
-void				free_token(t_token *head);
-void				free_cmd(t_cmd *head);
+void				fsplit(char **split, size_t j);
+t_token				*free_token(t_token *head);
+t_cmd				*free_cmd(t_cmd *head);
 void				free_tab(char **str);
+char				**ft_freetab(char **tab);
 
 /* SIGNALS */
 void				signal_handler(int signum);
@@ -113,32 +120,31 @@ void				set_sigact(void);
 void				signal_child(void);
 
 /* BULTIN */
-void				echo(char *options, t_shell *shell);
+void				echo(char **options, t_shell *shell);
 void				ft_env(t_shell *shell);
 void				export(t_shell *shell, char *env);
 int					cd(t_shell *shell, char *path);
+void				ft_unset(t_shell *shell, char *env_var);
 
 /* ENV	*/
 char				*ft_getenv(char *env_variable, t_shell *shell);
 int					ft_getenv_pos(char *env_variable, t_shell *shell);
 
 /*UTILS*/
-char				**ft_freetab(char **tab);
 char				**append_str(char **tab, char *str);
 
 /* EXECUTION */
 void				simple_execution(t_cmd *cmd, t_shell *shell, int pipin,
 						int pipout);
 void				execute_cmd(t_shell *shell);
-void				manage_infile(char **files, int *pipefd, char *cmd);
+int					manage_infile(char **files, int *pipefd, t_cmd *cmd);
 int					manage_outfile(char **files, int append);
 char				*find_path(char *program, t_shell *shell);
+int					execute_bultins(char *str, t_shell *shell);
+int					check_is_relative_path(char *program);
 
 /* HEREDOCS */
-int				do_all_heredocs(char **heredocs);
-
-/* PRINT ERRORS */
-void				print_no_file_error(char *cmd, char *file, int issue);
+void				do_all_heredocs(char **heredocs);
 
 /* GNL */
 char				*get_next_line(int fd);

@@ -6,26 +6,11 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 11:08:34 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/02/27 16:54:51 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 08:31:16 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	**ft_freetab(char **tab)
-{
-	size_t	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-	tab = NULL;
-	return (tab);
-}
 
 int	print_quoat(char *str, int *i, int pipefd)
 {
@@ -62,7 +47,7 @@ void	check_env(char *str, int pipefd, t_shell *shell)
 			if (print_quoat(str, &i, pipefd) > 0)
 				continue ;
 		}
-		else if (str[i] == '$' && str[i + 1])
+		if (str[i] == '$' && str[i + 1])
 		{
 			if (ft_strcmp(str + i, "$?") == 0)
 				ft_putnbr_fd(shell->ecode, pipefd);
@@ -76,26 +61,44 @@ void	check_env(char *str, int pipefd, t_shell *shell)
 	}
 }
 
-void	echo(char *options, t_shell *shell)
+int	check_first_options(char *str)
 {
-	int		i;
-	char	**splited;
-
-	if (!options)
-		write(1, "\n", 1);
-	splited = ft_split(options, ' ');
-	i = 0;
-	if (ft_strcmp(splited[0], "-n") == 0)
-		i++;
-	while (splited[i])
+	int i;
+	
+	i = 1;
+	while (str[i])
 	{
-		check_env(splited[i], 1, shell);
-		if (splited[i + 1])
-			write(1, " ", 1);
+		if (str[i] != 'n')
+			return (ft_putstr_fd(str, 1), 1);
 		i++;
 	}
-	if (ft_strcmp(splited[0], "-n") != 0)
+	return (0);
+}
+
+void	echo(char **options, t_shell *shell)
+{
+	int		i;
+	int		no_line;
+
+	if (!options[1])
+	{
 		write(1, "\n", 1);
-	ft_freetab(splited);
-	exit(0);
+		return ;
+	}
+	i = 1;
+	no_line = ft_strncmp(options[1], "-n", 2);
+	if (!no_line)
+	{
+		no_line = check_first_options(options[1]);
+		i++;
+	}
+	while (options[i])
+	{
+		check_env(options[i], 1, shell);
+		i++;
+		if (options[i])
+			write(1, " ", 1);
+	}
+	if (no_line)
+		write(1, "\n", 1);
 }

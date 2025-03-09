@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:18:45 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/02/27 22:18:04 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/09 08:46:36 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static char	*try_access_program(char **paths, char *program)
 	{
 		full_path = ft_strjoin(paths[i], "/");
 		tmp = full_path;
-		full_path = ft_strjoin(full_path, program);
+		full_path = ft_strjoin(tmp, program);
 		free(tmp);
 		if (access(full_path, F_OK | X_OK) == 0)
 		{
@@ -55,7 +55,9 @@ char	*find_path(char *program, t_shell *shell)
 {
 	char	**paths;
 	char	*full_path;
-
+	
+	if (check_is_relative_path(program))
+		return (program);
 	paths = ft_split(ft_getenv("PATH", shell), ':');
 	if (!paths)
 		return (NULL);
@@ -71,26 +73,32 @@ char	*find_path(char *program, t_shell *shell)
 	return (full_path);
 }
 
-void	manage_infile(char **files, int *pipefd, char *cmd)
+int	manage_infile(char **files, int *pipefd, t_cmd *cmd)
 {
 	int i;
+	char *cmd_name;
 
 	i = -1;
+	if (!cmd)
+		cmd_name = NULL;
+	else
+		cmd_name = cmd->cmd_list[0];
 	while (files[++i])
 	{
-		if (access(files[i], F_OK) == -1)
+		if (access(files[i], F_OK | R_OK) == -1)
 		{
-			print_no_file_error(cmd, files[i], 0);
-		}
-		if (access(files[i], R_OK) == -1)
-		{
-			print_no_file_error(cmd, files[i], 1);
+			perror(cmd_name);
 		}
 		pipefd[0] = open(files[i], O_RDONLY);
-		if (dup2(pipefd[0], 0) == -1)
-			perror("dup2 failed, undefined results!");
-		close(pipefd[0]);
+		if (pipefd[0] > 0)
+		{
+			dup2(pipefd[0], 0);
+			close(pipefd[0]);
+		}
+		else
+			return (-1);
 	}
+	return (pipefd[0]);
 }
 
 int	manage_outfile(char **files, int append)
@@ -102,8 +110,7 @@ int	manage_outfile(char **files, int append)
 	pipefd = -1;
 	while (files[i])
 	{
-		if (pipefd > 0)
-			close(pipefd);
+		close(pipefd);
 		if (!append)
 		{
 			unlink(files[i]);

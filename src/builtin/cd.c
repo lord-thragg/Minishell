@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 07:49:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/27 10:44:34 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/01 08:45:45 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,15 @@ int	cd(t_shell *shell, char *path)
 		if (ret == 0)
 			update_pwd(shell, path);
 		if (ret != 0)
+		{
 			perror(path);
+			shell->ecode = 1;
+		}
+		else
+			shell->ecode = 0;
 		return (ret);
 	}
+	shell->ecode = 1;
 	return (1);
 }
 

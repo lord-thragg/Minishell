@@ -3,34 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/24 14:26:22 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/09 08:33:10 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tab(char **str)
+void	fsplit(char **split, size_t j)
 {
-	int	i;
-
-	i = 0;
-	while (str && str[i])
+	while (j--)
 	{
-		free(str[i]);
-		str[i] = NULL;
-		i++;
+		if (split[j])
+		{
+			free(split[j]);
+			split[j] = NULL;
+		}
 	}
-	if (str)
-	{
-		free(str);
-		str = NULL;
-	}
+	free(split);
 }
 
-void	free_token(t_token *head)
+t_token	*free_token(t_token *head)
 {
 	t_token	*tmp;
 
@@ -38,14 +33,16 @@ void	free_token(t_token *head)
 	{
 		tmp = head;
 		head = head->next;
-		if (tmp->str)
+		if (tmp->str != NULL)
 			free(tmp->str);
 		free(tmp);
+		tmp = NULL;
 	}
-	head = NULL;
+	free(head);
+	return (NULL);
 }
 
-void	free_cmd(t_cmd *head)
+t_cmd	*free_cmd(t_cmd *head)
 {
 	t_cmd	*tmp;
 
@@ -54,29 +51,31 @@ void	free_cmd(t_cmd *head)
 		tmp = head;
 		head = head->next;
 		if (tmp->cmd_list)
-			free_tab(tmp->cmd_list);
+			tmp->cmd_list = ft_freetab(tmp->cmd_list);
 		if (tmp->infile)
-			free(tmp->infile);
+			tmp->infile = ft_freetab(tmp->infile);
 		if (tmp->outfile)
-			free(tmp->outfile);
+			tmp->outfile = ft_freetab(tmp->outfile);
+		if (tmp->limiters)
+			tmp->limiters = ft_freetab(tmp->limiters);
 		free(tmp);
 		tmp = NULL;
 	}
-	head = NULL;
+	free(head);
+	return (NULL);
 }
 
 void	free_all(t_shell *shell, char *emsg, int ecode)
 {
 	if (shell->token)
-		free_token(shell->token);
+		shell->token = free_token(shell->token);
 	if (shell->cmd)
-		free_cmd(shell->cmd);
+		shell->cmd = free_cmd(shell->cmd);
 	if (emsg)
 		printf("%s", emsg);
 	if (ecode != -1)
 	{
-		/*if (shell->env && shell->env[0])
-			free_env(shell->env);*/
+		ft_freetab(shell->env);
 		rl_clear_history();
 		exit(ecode);
 	}

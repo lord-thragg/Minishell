@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   advance_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/22 13:18:50 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 08:33:52 by luluzuri         ###   ########.fr       */
+/*   Created: 2025/03/08 10:32:14 by luluzuri          #+#    #+#             */
+/*   Updated: 2025/03/08 11:34:39 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	parsing(t_shell *shell, char *input)
+size_t	advance_to_next_segment(const char *s, char c, size_t i, int *in_quote)
 {
-	char	**splitted;
+	while (s[i] == c && !(*in_quote))
+		i++;
+	return (i);
+}
 
-	splitted = ft_splitspace(input);
-	if (!splitted)
-		return (0);
-	shell->token = tokenize(splitted);
-	if (!shell->token)
-		return (0);
-	shell->cmd = token_to_command(shell->token);
-	if (!shell->cmd)
-		return (0);
-	shell->token = NULL;
-	return (1);
+size_t	advance_through_segment(const char *s, char c, size_t i, int *in_quote)
+{
+	while ((s[i] && s[i] != c) || (*in_quote && i < ft_strlen(s)))
+	{
+		if (s[i] == '"' || s[i] == '\'')
+			*in_quote = !(*in_quote);
+		i++;
+	}
+	return (i);
 }

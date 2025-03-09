@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/02/26 17:16:43 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/09 08:33:23 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,14 @@ int	minishell(char **env)
 	{
 		input = readline("\033[0;32mminishell\033[0m-> ");
 		if (!input || strcmp(input, "exit") == 0)
-		{
-			free(input);
-			break ;
-		}
+			(free_all(&shell, NULL, 0), free(input));
 		if (input && *input)
 		{
 			if (!parsing(&shell, input))
-				free_all(&shell, ER_PARSING, EXT_PARSING);
+			{
+				free_all(&shell, ER_PARSING, -1);
+				continue ;
+			}
 			add_history(input);
 			execute_cmd(&shell);
 			free_all(&shell, NULL, -1);

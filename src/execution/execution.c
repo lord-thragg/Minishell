@@ -3,19 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:37:26 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/02/27 22:35:48 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/09 08:27:48 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	child_execution(char *cmd, char *options, t_shell *shell)
+int		execute_bultins(char *str, t_shell *shell)
+{
+	if (ft_strcmp(str, "export") == 0)
+	{
+		export(shell, shell->cmd->cmd_list[1]);
+		return (1);
+	}
+	if (ft_strcmp(str, "unset") == 0)
+	{
+		ft_unset(shell, shell->cmd->cmd_list[1]);
+		return (1);
+	}
+	if (ft_strcmp(str, "cd") == 0)
+	{
+		cd(shell, shell->cmd->cmd_list[1]);
+		return (1);
+	}
+	return (0);
+}
+
+void	child_execution(char *cmd, t_shell *shell)
 {
 	char	*path;
-	char	**full_cmd;
 
 	path = find_path(cmd, shell);
 	if (!path)
@@ -25,25 +44,17 @@ void	child_execution(char *cmd, char *options, t_shell *shell)
 		free(path);
 		exit(EXT_COMMAND_NOT_FOUND);
 	}
-	full_cmd = malloc(sizeof(char *) * 3);
-	if (!full_cmd)
+	if (execve(path, shell->cmd->cmd_list, shell->env) == -1)
 	{
 		free(path);
-		exit(EXT_MALLOC);
-	}
-	full_cmd[0] = cmd;
-	full_cmd[1] = options;
-	full_cmd[2] = NULL;
-	if (execve(path, full_cmd, shell->env) == -1)
-	{
-		free(path);
-		ft_freetab(full_cmd);
+		ft_freetab(shell->cmd->cmd_list);
 	}
 }
 
 void	parent_management(int infile, int outfile)
 {
-	close(outfile);
+	if (outfile > 1)
+		close(outfile);
 	dup2(infile, 0);
 	close(infile);
 }
@@ -51,7 +62,10 @@ void	parent_management(int infile, int outfile)
 static int	check_bultin(t_cmd *cmd, t_shell *shell)
 {
 	if (ft_strcmp(cmd->cmd_list[0], "echo") == 0)
-		return (echo(cmd->cmd_list[1], shell), 1);
+	{
+		echo(cmd->cmd_list, shell);
+		exit(0);
+	}
 	else if (ft_strcmp(cmd->cmd_list[0], "export") == 0)
 		exit(0);
 	else if (ft_strcmp(cmd->cmd_list[0], "env") == 0)
@@ -73,14 +87,13 @@ void	simple_execution(t_cmd *cmd, t_shell *shell, int pipin, int pipout)
 		if (pipin > 0)
 			close(pipin);
 		if (pipout > 1)
-		{
-			if (dup2(pipout, 1) == -1)
-				perror("dup2 failed2\n");
+		{	
+			dup2(pipout, 1);
 			close(pipout);
 		}
 		signal_child();
 		if (!check_bultin(cmd, shell))
-			child_execution(cmd->cmd_list[0], cmd->cmd_list[1], shell);
+			child_execution(cmd->cmd_list[0], shell);
 	}
 	else
 	{
