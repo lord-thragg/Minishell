@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 08:16:33 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 09:45:42 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,5 @@ t_cmd	*token_to_command(t_token *token)
 	{
 		add_cmd(&head, ncmd);
 	}
-	free_token(token);
 	return (head);
 }

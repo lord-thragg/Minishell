@@ -6,13 +6,13 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:37:26 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 08:27:48 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:06:31 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		execute_bultins(char *str, t_shell *shell)
+int	execute_bultins(char *str, t_shell *shell)
 {
 	if (ft_strcmp(str, "export") == 0)
 	{
@@ -42,12 +42,15 @@ void	child_execution(char *cmd, t_shell *shell)
 		path = ft_strjoin(cmd, ":command not found\n");
 		ft_putstr_fd(path, 2);
 		free(path);
+		free_all(shell, NULL, -1);
+		ft_freetab(shell->env);
 		exit(EXT_COMMAND_NOT_FOUND);
 	}
 	if (execve(path, shell->cmd->cmd_list, shell->env) == -1)
 	{
 		free(path);
-		ft_freetab(shell->cmd->cmd_list);
+		free_all(shell, NULL, -1);
+		ft_freetab(shell->env);
 	}
 }
 
@@ -64,14 +67,17 @@ static int	check_bultin(t_cmd *cmd, t_shell *shell)
 	if (ft_strcmp(cmd->cmd_list[0], "echo") == 0)
 	{
 		echo(cmd->cmd_list, shell);
-		exit(0);
+		free_all(shell, NULL, 0);
 	}
 	else if (ft_strcmp(cmd->cmd_list[0], "export") == 0)
-		exit(0);
+		free_all(shell, NULL, 0);
 	else if (ft_strcmp(cmd->cmd_list[0], "env") == 0)
-		return (ft_env(shell), 1);
+	{
+		ft_env(shell);
+		free_all(shell, NULL, 0);
+	}
 	else if (ft_strcmp(cmd->cmd_list[0], "cd") == 0)
-		exit(0);
+		free_all(shell, NULL, 0);
 	return (0);
 }
 
@@ -87,7 +93,7 @@ void	simple_execution(t_cmd *cmd, t_shell *shell, int pipin, int pipout)
 		if (pipin > 0)
 			close(pipin);
 		if (pipout > 1)
-		{	
+		{
 			dup2(pipout, 1);
 			close(pipout);
 		}

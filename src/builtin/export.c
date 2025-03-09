@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:10:38 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 08:27:37 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 09:07:18 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static char	**append_export(char **tab, char *str)
 	newtab = malloc(sizeof(char *) * (i + 2));
 	if (!newtab)
 	{
-		perror("malloc failed in exportn");
+		perror("malloc failed in export\n");
 		return (NULL);
 	}
 	i = 0;

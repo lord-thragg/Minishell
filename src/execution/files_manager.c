@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:18:45 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 08:46:36 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:09:59 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	check_directory(char *program, char **paths)
 {
-	struct stat statbuf;
+	struct stat	statbuf;
 
 	if (stat(program, &statbuf) != -1)
 	{
-		if (S_ISDIR(statbuf.st_mode)) 
+		if (S_ISDIR(statbuf.st_mode))
 		{
 			ft_putstr_fd(program, 2);
 			write(2, ": Is a directory\n", 17);
@@ -55,7 +55,7 @@ char	*find_path(char *program, t_shell *shell)
 {
 	char	**paths;
 	char	*full_path;
-	
+
 	if (check_is_relative_path(program))
 		return (program);
 	paths = ft_split(ft_getenv("PATH", shell), ':');
@@ -75,8 +75,8 @@ char	*find_path(char *program, t_shell *shell)
 
 int	manage_infile(char **files, int *pipefd, t_cmd *cmd)
 {
-	int i;
-	char *cmd_name;
+	int		i;
+	char	*cmd_name;
 
 	i = -1;
 	if (!cmd)
@@ -104,7 +104,7 @@ int	manage_infile(char **files, int *pipefd, t_cmd *cmd)
 int	manage_outfile(char **files, int append)
 {
 	int	i;
-	int pipefd;
+	int	pipefd;
 
 	i = 0;
 	pipefd = -1;

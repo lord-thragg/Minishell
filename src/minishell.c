@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 08:33:23 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:08:29 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	init_env(t_shell *shell, char **env)
 	nenv = (char **)malloc(2 * sizeof(char *));
 	if (!nenv)
 		return (0);
-	nenv[0] = strdup("PATH=/usr/bin");
+	nenv[0] = ft_strdup("PATH=/usr/bin");
 	nenv[1] = NULL;
 	shell->env = nenv;
 	return (1);

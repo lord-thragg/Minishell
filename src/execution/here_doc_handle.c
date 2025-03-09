@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:22:53 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 08:28:09 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:12:12 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	check_is_relative_path(char *program)
 
 char	**ft_freetab(char **tab)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (tab[i])

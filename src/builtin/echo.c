@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 11:08:34 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 08:31:16 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:27:18 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,33 +38,35 @@ int	print_quoat(char *str, int *i, int pipefd)
 void	check_env(char *str, int pipefd, t_shell *shell)
 {
 	int		i;
+	char	*tmp;
 
-	i = 0;
-	while (str[i])
+	i = -1;
+	while (str[++i])
 	{
 		if (str[i] == 39)
-		{
 			if (print_quoat(str, &i, pipefd) > 0)
 				continue ;
-		}
 		if (str[i] == '$' && str[i + 1])
 		{
 			if (ft_strcmp(str + i, "$?") == 0)
 				ft_putnbr_fd(shell->ecode, pipefd);
 			else
-				ft_putstr_fd(ft_getenv(str + i + 1, shell), pipefd);
+			{
+				tmp = ft_getenv(str + i + 1, shell);
+				if (tmp)
+					ft_putstr_fd(tmp, pipefd);
+			}
 			break ;
 		}
 		else
 			write(pipefd, &str[i], 1);
-		i++;
 	}
 }
 
 int	check_first_options(char *str)
 {
-	int i;
-	
+	int	i;
+
 	i = 1;
 	while (str[i])
 	{
@@ -77,8 +79,8 @@ int	check_first_options(char *str)
 
 void	echo(char **options, t_shell *shell)
 {
-	int		i;
-	int		no_line;
+	int	i;
+	int	no_line;
 
 	if (!options[1])
 	{

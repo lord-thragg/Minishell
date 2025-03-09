@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:54:13 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 08:37:35 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:10:10 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,17 @@ void	execute_cmd(t_shell *shell)
 	int		pipefd[2];
 	int		initfdin;
 	int		initfdout;
-	t_shell	*tmp;
+	t_cmd	*head;
 
-	tmp = shell;
-	if (tmp->cmd->cmd_list[0] && tmp->cmd->next == NULL)
+	head = shell->cmd;
+	if (shell->cmd->cmd_list[0] && shell->cmd->next == NULL)
 	{
-		if (execute_bultins(tmp->cmd->cmd_list[0], tmp))
+		if (execute_bultins(shell->cmd->cmd_list[0], shell))
 			return ;
 	}
 	initfdin = dup(0);
 	initfdout = dup(1);
-	loop_execution(tmp, pipefd);
-	wait_all_pid(tmp, initfdin, initfdout);
+	loop_execution(shell, pipefd);
+	wait_all_pid(shell, initfdin, initfdout);
+	shell->cmd = head;
 }
