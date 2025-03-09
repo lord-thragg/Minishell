@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:37:26 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 10:06:31 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:45:32 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,22 @@ static int	check_bultin(t_cmd *cmd, t_shell *shell)
 	if (ft_strcmp(cmd->cmd_list[0], "echo") == 0)
 	{
 		echo(cmd->cmd_list, shell);
-		free_all(shell, NULL, 0);
+		free_all(shell, NULL, shell->ecode);
 	}
 	else if (ft_strcmp(cmd->cmd_list[0], "export") == 0)
-		free_all(shell, NULL, 0);
+		free_all(shell, NULL, shell->ecode);
 	else if (ft_strcmp(cmd->cmd_list[0], "env") == 0)
 	{
 		ft_env(shell);
-		free_all(shell, NULL, 0);
+		free_all(shell, NULL, shell->ecode);
 	}
 	else if (ft_strcmp(cmd->cmd_list[0], "cd") == 0)
-		free_all(shell, NULL, 0);
+		free_all(shell, NULL, shell->ecode);
+	else if (ft_strcmp(cmd->cmd_list[0], "pwd") == 0)
+	{
+		ft_pwd(shell);
+		free_all(shell, NULL, shell->ecode);
+	}
 	return (0);
 }
 

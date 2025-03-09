@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:10:38 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 09:07:18 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:41:06 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,5 @@ void	export(t_shell *shell, char *env)
 		shell->env = append_export(shell->env, env);
 	}
 	ft_freetab(splited);
+	shell->ecode = 0;
 }

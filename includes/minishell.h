@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 08:26:34 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:43:31 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void				ft_env(t_shell *shell);
 void				export(t_shell *shell, char *env);
 int					cd(t_shell *shell, char *path);
 void				ft_unset(t_shell *shell, char *env_var);
-
+int					ft_pwd(t_shell *shell);
 /* ENV	*/
 char				*ft_getenv(char *env_variable, t_shell *shell);
 int					ft_getenv_pos(char *env_variable, t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 11:08:34 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 10:27:18 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:50:20 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	echo(char **options, t_shell *shell)
 	int	i;
 	int	no_line;
 
+	shell->ecode = 0;
 	if (!options[1])
 	{
 		write(1, "\n", 1);

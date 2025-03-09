@@ -18,7 +18,7 @@ INCDIR = includes
 # Source Files
 SRC_MAIN 		=	main.c minishell.c
 SRC_ENV 		=	env/ft_getenv.c
-SRC_BULTIN		=	builtin/echo.c builtin/env.c builtin/export.c builtin/cd.c builtin/unset.c
+SRC_BULTIN		=	builtin/echo.c builtin/env.c builtin/export.c builtin/cd.c builtin/unset.c builtin/pwd.c
 SRC_FREE		=	free/free.c
 SRC_SIGNALS		=	signals/signal_handling.c
 SRC_PARSING		=	parsing/parsing.c parsing/command.c parsing/token.c		\

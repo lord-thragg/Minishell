@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 11:57:00 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 10:19:00 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:41:01 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,5 @@ void	ft_env(t_shell *shell)
 		printf("%s\n", shell->env[i]);
 		i++;
 	}
+	shell->ecode = 0;
 }

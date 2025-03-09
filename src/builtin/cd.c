@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 07:49:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 09:57:09 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:40:33 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	cd(t_shell *shell, char *path)
 			shell->ecode = 0;
 		return (ret);
 	}
-	shell->ecode = 1;
-	return (1);
+	shell->ecode = 0;
+	return (0);
 }
 
 // int	main(int argc, char **argv)
