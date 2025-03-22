@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/22 13:53:58 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/22 18:08:59 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,7 @@ t_token				*tokenize(char **str);
 t_cmd				*token_to_command(t_token *token);
 t_token				*determine_type(t_cmd **head, t_cmd **cmd, t_token *token);
 char				**ft_splitspace(char const *s);
-size_t				advance_to_next_segment(const char *s, size_t i,
-						int *in_quote);
-size_t				advance_through_segment(const char *s, size_t i,
-						int *in_quote, char *quote_type);
-/* size_t				advance_to_next_segment(const char *s, size_t i, \
-											int *in_quote);
-size_t	advance_through_segment(const char *s, size_t i, \
-											int *in_quote); */
+char				*ft_strndup(const char *s, size_t n);
 
 /* FREE */
 void				free_all(t_shell *shell, char *emsg, int ecode);
