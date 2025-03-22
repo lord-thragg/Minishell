@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_commands2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 09:06:00 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 08:28:18 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:23:25 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,12 @@ void	add_cmd(t_cmd **head, t_cmd *ncmd)
 	tmp = *head;
 	if (!tmp)
 	{
+		ncmd->next = NULL;
 		*head = ncmd;
 		return ;
 	}
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = ncmd;
+	ncmd->next = NULL;
 }

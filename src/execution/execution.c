@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:37:26 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 10:45:32 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/22 10:46:24 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	execute_bultins(char *str, t_shell *shell)
 {
 	if (ft_strcmp(str, "export") == 0)
 	{
-		export(shell, shell->cmd->cmd_list[1]);
+		export(shell);
 		return (1);
 	}
 	if (ft_strcmp(str, "unset") == 0)
@@ -28,6 +28,11 @@ int	execute_bultins(char *str, t_shell *shell)
 	{
 		cd(shell, shell->cmd->cmd_list[1]);
 		return (1);
+	}
+	if (ft_strcmp(str, "exit") == 0)
+	{
+		shell->ecode = 0;
+		ft_exit(shell);
 	}
 	return (0);
 }
@@ -58,7 +63,8 @@ void	parent_management(int infile, int outfile)
 {
 	if (outfile > 1)
 		close(outfile);
-	dup2(infile, 0);
+	if (dup2(infile, 0) == -1)
+		perror("parent management: ");
 	close(infile);
 }
 
@@ -95,6 +101,8 @@ void	simple_execution(t_cmd *cmd, t_shell *shell, int pipin, int pipout)
 		perror("fork failed!\n");
 	if (!pid)
 	{
+		close(shell->initin);
+		close(shell->initout);
 		if (pipin > 0)
 			close(pipin);
 		if (pipout > 1)

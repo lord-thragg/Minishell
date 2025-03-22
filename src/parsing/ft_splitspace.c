@@ -3,98 +3,146 @@
 /*                                                        :::      ::::::::   */
 /*   ft_splitspace.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 08:39:35 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/08 10:52:17 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/22 13:38:52 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static size_t	segcount(char const *s, char c)
+void	print_tab(char **splited)
 {
-	size_t	i;
-	size_t	segnum;
-	int		in_quote;
+	for (int i = 0; splited[i]; i++)
+		printf("%s\n", splited[i]);
+}
 
-	i = 0;
-	segnum = 0;
-	in_quote = 0;
+static char	*ft_strndup(const char *s, size_t n)
+{
+	char	*res;
+
+	res = malloc(n + 1);
+	if (!res)
+		return (NULL);
+	memcpy(res, s, n);
+	res[n] = '\0';
+	return (res);
+}
+
+static size_t	segcount(const char *s)
+{
+	size_t	i = 0;
+	size_t	segnum = 0;
+
 	while (s[i])
 	{
-		while (s[i] == c && !in_quote)
+		/* Ignorer espaces et tabulations */
+		while (s[i] == ' ' || s[i] == '\t')
 			i++;
-		if (s[i])
-			segnum++;
-		while ((s[i] && s[i] != c) || (in_quote && i < ft_strlen(s)))
+		if (!s[i])
+			break;
+		/* Si le segment commence par un guillemet simple ou double */
+		if (s[i] == '\'' || s[i] == '"')
 		{
-			if (s[i] == '"' || s[i] == '\'')
-				in_quote = !in_quote;
+			char quote = s[i];
+			i++;  // passer le guillemet ouvrant
+			while (s[i] && s[i] != quote)
+				i++;
+			if (s[i] == quote)
+				i++;  // passer le guillemet fermant
+			segnum++;
+		}
+		else if (s[i] == '|')
+		{
+			segnum++;
 			i++;
+		}
+		else
+		{
+			while (s[i] && s[i] != ' ' && s[i] != '\t'
+				&& s[i] != '\'' && s[i] != '"' && s[i] != '|')
+				i++;
+			segnum++;
 		}
 	}
 	return (segnum);
 }
 
-static char	*copy_without_quotes(const char *s, size_t start, size_t end)
+static char	**spliter(char **split, const char *s)
 {
-	size_t	len;
-	char	*result;
-	size_t	j;
+	size_t	i = 0;
+	size_t	j = 0;
+	size_t	start;
 
-	len = end - start;
-	result = (char *)malloc(len + 1);
-	j = 0;
-	if (!result)
-		return (NULL);
-	while (start < end)
-	{
-		if (s[start] != '"' && s[start] != '\'')
-			result[j++] = s[start];
-		start++;
-	}
-	result[j] = '\0';
-	return (result);
-}
-
-static char	**spliter(char **split, char const *s, char c, size_t start)
-{
-	size_t	i;
-	size_t	j;
-	int		in_quote;
-
-	i = 0;
-	j = 0;
-	in_quote = 0;
 	while (s[i])
 	{
-		i = advance_to_next_segment(s, c, i, &in_quote);
-		start = i;
-		i = advance_through_segment(s, c, i, &in_quote);
-		if (i > start)
+		/* Ignorer espaces et tabulations */
+		while (s[i] == ' ' || s[i] == '\t')
+			i++;
+		if (!s[i])
+			break;
+		/* Si le segment commence par un guillemet simple ou double */
+		if (s[i] == '\'' || s[i] == '"')
 		{
-			split[j] = copy_without_quotes(s, start, i);
-			if (!split[j])
-				return (fsplit(split, j), NULL);
-			j++;
+			char quote = s[i];
+			/* Pour les guillemets simples, on garde les quotes */
+			if (quote == '\'')
+			{
+				start = i;  // inclure le guillemet ouvrant
+				i++;  // passer le guillemet ouvrant
+				while (s[i] && s[i] != '\'')
+					i++;
+				if (s[i] == '\'')
+					i++;  // inclure le guillemet fermant
+				/* On garde le token avec les quotes */
+				split[j++] = ft_strndup(s + start, i - start);
+			}
+			/* Pour les guillemets doubles, on ne garde pas les quotes */
+			else if (quote == '"')
+			{
+				i++;  // passer le guillemet ouvrant
+				start = i;
+				while (s[i] && s[i] != '"')
+					i++;
+				/* On copie le contenu entre les quotes */
+				split[j++] = ft_strndup(s + start, i - start);
+				if (s[i] == '"')
+					i++;  // passer le guillemet fermant
+			}
+		}
+		else if (s[i] == '|')
+		{
+			split[j++] = ft_strndup("|", 1);
+			i++;
+		}
+		else
+		{
+			start = i;
+			while (s[i] && s[i] != ' ' && s[i] != '\t'
+				&& s[i] != '\'' && s[i] != '"' && s[i] != '|')
+				i++;
+			split[j++] = ft_strndup(s + start, i - start);
 		}
 	}
-	return (split[j] = NULL, split);
+	split[j] = NULL;
+	return (split);
 }
 
-char	**ft_splitspace(char const *s)
+
+
+char	**ft_splitspace(const char *s)
 {
 	size_t	segnum;
 	char	**splited;
 
 	if (!s)
 		return (NULL);
-	segnum = segcount(s, ' ');
-	splited = (char **)malloc((segnum + 1) * sizeof(char *));
+	segnum = segcount(s);
+	splited = malloc((segnum + 1) * sizeof(char *));
 	if (!splited)
 		return (NULL);
-	if (!spliter(splited, s, ' ', 0))
-		return (NULL);
+	spliter(splited, s);
+	print_tab(splited);
 	return (splited);
 }

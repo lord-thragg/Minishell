@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:10:38 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 10:41:06 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/22 13:54:34 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,12 @@ static char	**append_export(char **tab, char *str)
 	}
 	ft_freetab(tab);
 	newtab[i] = ft_strdup(str);
+	fprintf(stderr, "env = %s\n", newtab[i]);
 	newtab[i + 1] = NULL;
 	return (newtab);
 }
 
-void	export(t_shell *shell, char *env)
+static void	export_all_env(char *env, t_shell *shell)
 {
 	char	**splited;
 	int		i;
@@ -75,10 +76,7 @@ void	export(t_shell *shell, char *env)
 		return ;
 	splited = split_first(env);
 	if (!splited)
-	{
-		perror("Malloc Failed in export!\n");
 		return ;
-	}
 	i = ft_getenv_pos(splited[0], shell);
 	if (i >= 0)
 	{
@@ -91,4 +89,53 @@ void	export(t_shell *shell, char *env)
 	}
 	ft_freetab(splited);
 	shell->ecode = 0;
+}
+
+static char	*recover_full_env(char *init_env, char *new_env_value)
+{
+	char	*new_env;
+	char	*tmp2;
+	char	**tmp;
+
+	if (!new_env_value)
+		return (NULL);
+	tmp = ft_split(init_env, '=');
+	tmp2 = tmp[0];
+	new_env = ft_strjoin(tmp2, "=");
+	tmp2 = new_env;
+	new_env = ft_strjoin(tmp2, new_env_value);
+	free(tmp2);
+	ft_freetab(tmp);
+	return (new_env);
+}
+
+void	export(t_shell *shell)
+{
+	int		i;
+	int		j;
+	char	*env;
+
+	i = 1;
+	j = 0;
+	while (shell->cmd->cmd_list[i])
+	{
+		while (shell->cmd->cmd_list[i][j] != '=')
+			j++;
+		if (shell->cmd->cmd_list[i][j + 1] == '$')
+		{
+			env = recover_full_env(shell->cmd->cmd_list[i],
+					ft_getenv(shell->cmd->cmd_list[i] + j + 2, shell));
+			if (env)
+			{
+				export_all_env(env, shell);
+				free(env);
+			}
+			else
+				shell->env = append_export(shell->env, "");
+			i++;
+			continue ;
+		}
+		export_all_env(shell->cmd->cmd_list[i], shell);
+		i++;
+	}
 }

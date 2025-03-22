@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:18:45 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 10:09:59 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/18 07:46:58 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,12 @@ char	*find_path(char *program, t_shell *shell)
 	char	*full_path;
 
 	if (check_is_relative_path(program))
-		return (program);
+	{
+		if (access(program, F_OK | X_OK) == 0)
+			return (ft_strdup(program));
+		else
+			return (NULL);
+	}
 	paths = ft_split(ft_getenv("PATH", shell), ':');
 	if (!paths)
 		return (NULL);
@@ -73,9 +78,10 @@ char	*find_path(char *program, t_shell *shell)
 	return (full_path);
 }
 
-int	manage_infile(char **files, int *pipefd, t_cmd *cmd)
+int	manage_infile(char **files, t_cmd *cmd)
 {
 	int		i;
+	int		pipefd[2];
 	char	*cmd_name;
 
 	i = -1;

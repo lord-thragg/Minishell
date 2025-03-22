@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   loop_execution.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:54:13 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 10:10:10 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:14:04 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	wait_all_pid(t_shell *shell, int in, int out)
+static void	wait_all_pid(t_shell *shell)
 {
 	pid_t	wpid;
 	int		status;
@@ -24,10 +24,10 @@ static void	wait_all_pid(t_shell *shell, int in, int out)
 			shell->ecode = WEXITSTATUS(status);
 		wpid = wait(&status);
 	}
-	dup2(in, 0);
-	dup2(out, 1);
-	close(in);
-	close(out);
+	dup2(shell->initin, 0);
+	dup2(shell->initout, 1);
+	close(shell->initin);
+	close(shell->initout);
 }
 
 int	manage_pipe_fd(t_shell *shell, int *pipefd)
@@ -44,12 +44,7 @@ int	manage_pipe_fd(t_shell *shell, int *pipefd)
 	}
 	if (shell->cmd->infile[0] != NULL || shell->cmd->limiters[0] != NULL)
 	{
-		close(pipefd[0]);
-		if (shell->cmd->infile)
-			pipefd[0] = manage_infile(shell->cmd->infile, pipefd, shell->cmd);
-		if (shell->cmd->limiters[0])
-			do_all_heredocs(shell->cmd->limiters);
-		return (1);
+		choose_infile_order(shell);
 	}
 	return (0);
 }
@@ -78,8 +73,6 @@ static void	loop_execution(t_shell *shell, int *pipefd)
 void	execute_cmd(t_shell *shell)
 {
 	int		pipefd[2];
-	int		initfdin;
-	int		initfdout;
 	t_cmd	*head;
 
 	head = shell->cmd;
@@ -88,9 +81,9 @@ void	execute_cmd(t_shell *shell)
 		if (execute_bultins(shell->cmd->cmd_list[0], shell))
 			return ;
 	}
-	initfdin = dup(0);
-	initfdout = dup(1);
+	shell->initin = dup(0);
+	shell->initout = dup(1);
 	loop_execution(shell, pipefd);
-	wait_all_pid(shell, initfdin, initfdout);
+	wait_all_pid(shell);
 	shell->cmd = head;
 }

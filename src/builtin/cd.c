@@ -3,14 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 07:49:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 10:40:33 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/22 10:49:04 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char	**append_export(char **tab, char *str)
+{
+	int		i;
+	char	**newtab;
+
+	i = 0;
+	while (tab[i])
+		i++;
+	newtab = malloc(sizeof(char *) * (i + 2));
+	if (!newtab)
+	{
+		perror("malloc failed in export\n");
+		return (NULL);
+	}
+	i = 0;
+	while (tab[i])
+	{
+		newtab[i] = ft_strdup(tab[i]);
+		i++;
+	}
+	ft_freetab(tab);
+	newtab[i] = ft_strdup(str);
+	newtab[i + 1] = NULL;
+	return (newtab);
+}
 
 static int	update_pwd(t_shell *shell, char *path)
 {
@@ -25,7 +51,7 @@ static int	update_pwd(t_shell *shell, char *path)
 	pwd = ft_strjoin("PWD=", cwd);
 	if (!pwd)
 		return (1);
-	export(shell, pwd);
+	shell->env = append_export(shell->env, pwd);
 	free(pwd);
 	return (0);
 }

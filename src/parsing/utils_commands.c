@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_commands.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 16:22:15 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 07:36:39 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:43:09 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static t_token	*infile_outfile(t_cmd *cmd, t_token *token)
 	}
 	if (token->type == REDIN)
 	{
+		cmd->last = 0;
 		if (!token->next || !token->next->str)
 			return (NULL);
 		cmd->infile = append_str(cmd->infile, token->next->str);
@@ -47,6 +48,7 @@ static t_token	*file_type(t_cmd *cmd, t_token *token)
 		return (infile_outfile(cmd, token));
 	if (token->type == HEREDOC)
 	{
+		cmd->last = 1;
 		i = 0;
 		while (cmd->limiters[i])
 			i++;
@@ -84,11 +86,11 @@ t_token	*determine_type(t_cmd **head, t_cmd **cmd, t_token *token)
 	if (token->type == ARG)
 		return (arg_type(cmd, token));
 	tmp = file_type(*cmd, token);
-	if (!tmp)
+	if (!tmp && token->type != PIPE)
 		return (NULL);
 	if (tmp)
 		return (tmp);
-	if (token->type == PIPE || token->next == NULL)
+	if (token->type == PIPE && token->next != NULL)
 	{
 		add_cmd(head, *cmd);
 		(*cmd) = NULL;

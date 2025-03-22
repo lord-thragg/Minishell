@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 09:52:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 09:45:42 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:44:14 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static t_cmd	*create_cmd(t_cmd *ncmd, t_token *token)
 	ncmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!ncmd)
 		return (NULL);
+	ncmd->last = -1;
 	ncmd->cmd_list = (char **)malloc((ctoken(token) + 1) * sizeof(char *));
 	if (!ncmd->cmd_list)
 		return (NULL);
@@ -99,6 +100,7 @@ t_cmd	*token_to_command(t_token *token)
 	if (tmp == NULL)
 	{
 		add_cmd(&head, ncmd);
+		ncmd = NULL;
 	}
 	return (head);
 }

@@ -3,29 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   advance_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 10:32:14 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 10:10:23 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:29:35 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	advance_to_next_segment(const char *s, char c, size_t i, int *in_quote)
+/* size_t	advance_to_next_segment(const char *s, size_t i, int *in_quote)
 {
-	while (s[i] == c && !(*in_quote))
+	while ((s[i] == ' ' || s[i] == '\t') && !(*in_quote))
 		i++;
 	return (i);
 }
 
-size_t	advance_through_segment(const char *s, char c, size_t i, int *in_quote)
+size_t	advance_through_segment(const char *s, size_t i, int *in_quote)
 {
-	while ((s[i] && s[i] != c) || (*in_quote && i < ft_strlen(s)))
+	if (s[i] == '|' && !(*in_quote))
+		return (i + 1);
+	while (s[i] && ((s[i] != ' ' && s[i] != '\t' && s[i] != '|')
+			|| (*in_quote)))
 	{
-		if (s[i] == '"' || s[i] == '\'')
+		if (s[i] == '\'' || s[i] == '"')
 			*in_quote = !(*in_quote);
 		i++;
 	}
 	return (i);
-}
+} */

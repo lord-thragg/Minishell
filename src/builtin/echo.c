@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 11:08:34 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 10:50:20 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/22 13:51:58 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,23 @@
 
 int	print_quoat(char *str, int *i, int pipefd)
 {
-	int	j;
+	int		j;
+	char	quote;
 
+	quote = str[*i];
 	j = *i + 1;
+	write(pipefd, &quote, 1);
 	while (str[j])
 	{
-		if (str[j] == 39)
+		if (str[j] == quote)
 		{
-			j = *i + 1;
-			while (str[j] != 39)
+			*i = *i + 1;
+			while (*i < j)
 			{
-				write(pipefd, &str[j], 1);
-				j++;
+				write(pipefd, &str[*i], 1);
+				(*i)++;
 			}
-			*i = j + 1;
+			write(pipefd, &quote, 1);
 			return (j);
 		}
 		j++;
@@ -35,31 +38,59 @@ int	print_quoat(char *str, int *i, int pipefd)
 	return (0);
 }
 
-void	check_env(char *str, int pipefd, t_shell *shell)
+void	expand_env_var(char *str, int *i, int pipefd, t_shell *shell)
 {
-	int		i;
+	int		j;
 	char	*tmp;
+	char	*value;
 
-	i = -1;
-	while (str[++i])
+	j = *i + 1;
+	while (str[j] && (ft_isalnum(str[j]) || str[j] == '_'))
+		j++;
+	if (str[*i + 1] == '?')
 	{
-		if (str[i] == 39)
-			if (print_quoat(str, &i, pipefd) > 0)
-				continue ;
-		if (str[i] == '$' && str[i + 1])
+		ft_putnbr_fd(shell->ecode, pipefd);
+		*i += 2;
+	}
+	else
+	{
+		tmp = ft_substr(str, *i + 1, j - (*i + 1));
+		if (tmp)
 		{
-			if (ft_strcmp(str + i, "$?") == 0)
-				ft_putnbr_fd(shell->ecode, pipefd);
-			else
-			{
-				tmp = ft_getenv(str + i + 1, shell);
-				if (tmp)
-					ft_putstr_fd(tmp, pipefd);
-			}
-			break ;
+			value = ft_getenv(tmp, shell);
+			if (value)
+				ft_putstr_fd(value, pipefd);
+			free(tmp);
 		}
+		*i = j;
+	}
+}
+
+void	check_env(char *str, int pipefd, t_shell *shell, int i)
+{
+	int	in_single_quote;
+	int	in_double_quote;
+
+	in_single_quote = 0;
+	in_double_quote = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'' && !in_double_quote)
+		{
+			in_single_quote = !in_single_quote;
+			i++;
+			continue ;
+		}
+		if (str[i] == '"' && !in_single_quote)
+		{
+			in_double_quote = !in_double_quote;
+			i++;
+			continue ;
+		}
+		if (str[i] == '$' && str[i + 1] && !in_single_quote)
+			expand_env_var(str, &i, pipefd, shell);
 		else
-			write(pipefd, &str[i], 1);
+			write(pipefd, &str[i++], 1);
 	}
 }
 
@@ -82,7 +113,6 @@ void	echo(char **options, t_shell *shell)
 	int	i;
 	int	no_line;
 
-	shell->ecode = 0;
 	if (!options[1])
 	{
 		write(1, "\n", 1);
@@ -97,11 +127,11 @@ void	echo(char **options, t_shell *shell)
 	}
 	while (options[i])
 	{
-		check_env(options[i], 1, shell);
-		i++;
+		handle_single_quotes(options, &i, shell);
 		if (options[i])
 			write(1, " ", 1);
 	}
 	if (no_line)
 		write(1, "\n", 1);
+	shell->ecode = 0;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_handle.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:22:53 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/09 10:12:12 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:50:18 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	do_all_heredocs(char **heredocs)
 			here_doc_loop(heredocs[i], outfd[1]);
 			close(outfd[1]);
 			dup2(outfd[0], 0);
-			close(outfd[0]);
 		}
 		else
 			here_doc_loop(heredocs[i], 0);

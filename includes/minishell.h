@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 10:43:31 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/22 13:53:58 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@
 //# define SPACE		10
 
 /* MSG ERROR */
-# define ER_MALLOC "malloc error.\n"
-# define ER_SHELL "shell error.\n"
-# define ER_PARSING "parsing error.\n"
+# define ER_MALLOC "Error: malloc allocation failed.\n"
+# define ER_SHELL "Error: shell allocation failed.\n"
+# define ER_PARSING "Error: Wrong syntax.\n"
 
 /* CODE ERROR */
 # define EXT_MALLOC 1
@@ -65,6 +65,7 @@ extern pid_t		g_sigpid;
 
 typedef struct s_cmd
 {
+	int				last;
 	bool			append;
 	char			**infile;
 	char			**outfile;
@@ -88,6 +89,8 @@ typedef struct s_shell
 	t_cmd			*cmd;
 	int				ecode;
 	int				last_pid;
+	int				initin;
+	int				initout;
 }					t_shell;
 
 /* MAIN */
@@ -101,10 +104,14 @@ t_token				*tokenize(char **str);
 t_cmd				*token_to_command(t_token *token);
 t_token				*determine_type(t_cmd **head, t_cmd **cmd, t_token *token);
 char				**ft_splitspace(char const *s);
-size_t				advance_to_next_segment(const char *s, char c, size_t i,
+size_t				advance_to_next_segment(const char *s, size_t i,
 						int *in_quote);
-size_t				advance_through_segment(const char *s, char c, size_t i,
-						int *in_quote);
+size_t				advance_through_segment(const char *s, size_t i,
+						int *in_quote, char *quote_type);
+/* size_t				advance_to_next_segment(const char *s, size_t i, \
+											int *in_quote);
+size_t	advance_through_segment(const char *s, size_t i, \
+											int *in_quote); */
 
 /* FREE */
 void				free_all(t_shell *shell, char *emsg, int ecode);
@@ -122,10 +129,14 @@ void				signal_child(void);
 /* BULTIN */
 void				echo(char **options, t_shell *shell);
 void				ft_env(t_shell *shell);
-void				export(t_shell *shell, char *env);
+void				export(t_shell *shell);
 int					cd(t_shell *shell, char *path);
 void				ft_unset(t_shell *shell, char *env_var);
 int					ft_pwd(t_shell *shell);
+void				ft_exit(t_shell *shell);
+void				handle_single_quotes(char **options, int *i,
+						t_shell *shell);
+void				check_env(char *str, int pipefd, t_shell *shell, int i);
 /* ENV	*/
 char				*ft_getenv(char *env_variable, t_shell *shell);
 int					ft_getenv_pos(char *env_variable, t_shell *shell);
@@ -137,11 +148,12 @@ char				**append_str(char **tab, char *str);
 void				simple_execution(t_cmd *cmd, t_shell *shell, int pipin,
 						int pipout);
 void				execute_cmd(t_shell *shell);
-int					manage_infile(char **files, int *pipefd, t_cmd *cmd);
+int					manage_infile(char **files, t_cmd *cmd);
 int					manage_outfile(char **files, int append);
 char				*find_path(char *program, t_shell *shell);
 int					execute_bultins(char *str, t_shell *shell);
 int					check_is_relative_path(char *program);
+void				choose_infile_order(t_shell *shell);
 
 /* HEREDOCS */
 void				do_all_heredocs(char **heredocs);
