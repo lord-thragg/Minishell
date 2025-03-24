@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/17 12:25:10 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/24 15:10:04 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,21 @@ static char	**copy_double_tab(char **env)
 static int	init_env(t_shell *shell, char **env)
 {
 	char	**nenv;
+	char	pwd[1024];
 
 	if (env && env[0])
 	{
 		shell->env = copy_double_tab(env);
 		return (1);
 	}
-	nenv = (char **)malloc(2 * sizeof(char *));
+	nenv = (char **)malloc(4 * sizeof(char *));
 	if (!nenv)
 		return (0);
-	nenv[0] = ft_strdup("PATH=/usr/bin");
-	nenv[1] = NULL;
+	getcwd(pwd, 1024);
+	nenv[0] = ft_strdup(ft_strjoin("PWD=", pwd));
+	nenv[1] = ft_strdup("SHLVL=1");
+	nenv[2] = ft_strdup("OLDPWD=");
+	nenv[3] = NULL;
 	shell->env = nenv;
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 08:39:35 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/24 12:52:03 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/24 14:46:51 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,5 @@ char	**ft_splitspace(const char *s)
 	if (!splited)
 		return (NULL);
 	spliter(splited, s);
-	printf("split[0] -> %s\n", splited[0]);
-	print_tab(splited);
 	return (splited);
 }
