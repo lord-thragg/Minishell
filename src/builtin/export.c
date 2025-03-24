@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:10:38 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/22 13:54:34 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/24 08:38:54 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static char	**append_export(char **tab, char *str)
 	}
 	ft_freetab(tab);
 	newtab[i] = ft_strdup(str);
-	fprintf(stderr, "env = %s\n", newtab[i]);
 	newtab[i + 1] = NULL;
 	return (newtab);
 }
@@ -109,13 +108,11 @@ static char	*recover_full_env(char *init_env, char *new_env_value)
 	return (new_env);
 }
 
-void	export(t_shell *shell)
+void	export(t_shell *shell, int i)
 {
-	int		i;
 	int		j;
 	char	*env;
 
-	i = 1;
 	j = 0;
 	while (shell->cmd->cmd_list[i])
 	{
@@ -126,16 +123,16 @@ void	export(t_shell *shell)
 			env = recover_full_env(shell->cmd->cmd_list[i],
 					ft_getenv(shell->cmd->cmd_list[i] + j + 2, shell));
 			if (env)
-			{
 				export_all_env(env, shell);
-				free(env);
-			}
 			else
-				shell->env = append_export(shell->env, "");
-			i++;
-			continue ;
+			{
+				env = recover_full_env(shell->cmd->cmd_list[i], "");
+				shell->env = append_export(shell->env, env);
+			}
+			free(env);
 		}
-		export_all_env(shell->cmd->cmd_list[i], shell);
+		else
+			export_all_env(shell->cmd->cmd_list[i], shell);
 		i++;
 	}
 }

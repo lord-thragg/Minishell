@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:37:26 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/22 10:46:24 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/24 08:37:48 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	execute_bultins(char *str, t_shell *shell)
 {
 	if (ft_strcmp(str, "export") == 0)
 	{
-		export(shell);
+		export(shell, 1);
 		return (1);
 	}
 	if (ft_strcmp(str, "unset") == 0)

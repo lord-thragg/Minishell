@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/22 18:08:59 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/24 10:12:57 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,17 @@ int					ctoken(t_token *tok);
 t_token				*tokenize(char **str);
 t_cmd				*token_to_command(t_token *token);
 t_token				*determine_type(t_cmd **head, t_cmd **cmd, t_token *token);
+size_t				segcount(const char *s);
 char				**ft_splitspace(char const *s);
 char				*ft_strndup(const char *s, size_t n);
+size_t				count_segments(const char *s, size_t *i);
+size_t				count_quotes(const char *s, size_t *i, char quote);
 
 /* FREE */
 void				free_all(t_shell *shell, char *emsg, int ecode);
 void				fsplit(char **split, size_t j);
 t_token				*free_token(t_token *head);
 t_cmd				*free_cmd(t_cmd *head);
-void				free_tab(char **str);
 char				**ft_freetab(char **tab);
 
 /* SIGNALS */
@@ -122,7 +124,7 @@ void				signal_child(void);
 /* BULTIN */
 void				echo(char **options, t_shell *shell);
 void				ft_env(t_shell *shell);
-void				export(t_shell *shell);
+void				export(t_shell *shell, int i);
 int					cd(t_shell *shell, char *path);
 void				ft_unset(t_shell *shell, char *env_var);
 int					ft_pwd(t_shell *shell);
