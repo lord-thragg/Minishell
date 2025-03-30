@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 16:35:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/28 11:55:07 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/30 10:35:02 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,27 +74,19 @@ static int	get_last_type(t_token *head)
 	return (tmp->type);
 }
 
-t_token	*tokenize(char **str)
+int	tokenize(char *input, t_token **token)
 {
 	int		i;
-	t_token	*head;
-	t_token	*ntoken;
+	char	*input_loop;
+	char	buffer[BSIZE];
 
 	i = 0;
-	head = NULL;
-	ntoken = NULL;
-	while (str[i])
-	{
-		ntoken = create_token(str[i]);
-		if (!ntoken)
-			return (perror("couldn't create the token"), NULL);
-		ntoken->type = detect_type(str[i]);
-		if (ntoken->type == ARG)
-			if (i == 0 || (get_last_type(head) == PIPE))
-				ntoken->type = CMD;
-		add_token(&head, ntoken);
-		i++;
-	}
-	ft_freetab(str);
-	return (head);
+	ft_bzero(buffer, BSIZE);
+	input_loop = input;
+	while (*input_loop)
+		if (process_input(&input_loop, token, buffer, &i) == KO)
+			return (KO);
+	if (ft_strlen(buffer) > 0)
+		add_token(token, buffer);
+	return (OK);
 }

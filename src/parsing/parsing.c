@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 13:18:50 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/18 07:45:15 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/30 10:17:05 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,17 @@ int	check_only_space(char *input)
 		i++;
 	}
 	if (i != -1)
-		return (2);
-	return (0);
+		return (KO);
+	return (OK);
 }
 
 int	parsing(t_shell *shell, char *input)
 {
-	char	**splitted;
-
-	splitted = NULL;
-	if (check_only_space(input))
-		return (2);
-	splitted = ft_splitspace(input);
-	if (!splitted)
-		return (0);
-	shell->token = tokenize(splitted);
-	if (!shell->token)
-		return (0);
+	if (check_only_space(input) == KO)
+		return (KO);
+	if (ft_strlen(input) > 0 && tokenize(input, &shell->token))
 	shell->cmd = token_to_command(shell->token);
 	if (!shell->cmd)
-		return (0);
-	return (1);
+		return (KO);
+	return (OK);
 }

@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/28 11:55:44 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/30 10:24:49 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@
 # define CYAN "\033[0;36m"
 # define RESET "\033[0m"
 
+/* PARSING */
+# define BSIZE 4096
+
 /* COMMAND TYPES */
 # define CMD 1
 # define ARG 2
@@ -45,7 +48,6 @@
 # define REDOUT 6
 # define APPEND 7
 # define HEREDOC 8
-//# define SPACE		10
 
 /* MSG ERROR */
 # define ER_MALLOC "Error: malloc allocation failed.\n"
@@ -53,7 +55,8 @@
 # define ER_PARSING "Error: Wrong syntax.\n"
 
 /* CODE ERROR */
-# define EXT_MALLOC 1
+# define OK 0
+# define KO 1
 # define EXT_SHELL 2
 # define EXT_PARSING 3
 # define EXT_COMMAND_NOT_FOUND 127
@@ -100,7 +103,7 @@ int					minishell(char **env);
 int					parsing(t_shell *shell, char *input);
 void				add_cmd(t_cmd **head, t_cmd *ncmd);
 int					ctoken(t_token *tok);
-t_token				*tokenize(char **str);
+int					tokenize(char *input, t_token **token);
 t_cmd				*token_to_command(t_token *token);
 t_token				*determine_type(t_cmd **head, t_cmd **cmd, t_token *token);
 size_t				segcount(const char *s);
