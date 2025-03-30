@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   utils_commands2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 09:06:00 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/12 11:23:25 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/28 11:55:23 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*rebuild_str(char **tab)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	tmp = NULL;
+	while (tab[i])
+	{
+		tmp = ft_strjoin(tmp, tab[i]);
+		i++;
+	}
+	return (tmp);
+}
 
 int	ctoken(t_token *tok)
 {

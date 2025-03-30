@@ -39,7 +39,7 @@ OBJS		= 	ft_isalpha.o ft_isdigit.o ft_isalnum.o \
 				ft_putendl_fd.o ft_putnbr_fd.o ft_strcmp.o \
 
 cc			= gcc
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -g3
 INCLUDES	= -I .
 
 #---------------------------------------------------#

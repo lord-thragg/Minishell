@@ -6,7 +6,7 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 16:22:15 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/12 10:43:09 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/03/28 09:49:15 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ static t_token	*file_type(t_cmd *cmd, t_token *token)
 		i = 0;
 		while (cmd->limiters[i])
 			i++;
+		if (!token->next || !token->next->str)
+			return (NULL);
 		cmd->limiters[i] = ft_strdup(token->next->str);
 		return (token->next);
 	}

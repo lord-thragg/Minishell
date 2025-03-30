@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:10:38 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/24 08:38:54 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/28 08:12:11 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	**split_first(char *env)
 	i = 0;
 	while (env[i])
 	{
-		if (env[i] == '=' && i > 1)
+		if (env[i] == '=' && i > 0)
 		{
 			splited[0] = ft_substr(env, 0, i);
 			splited[1] = ft_substr(env, i + 1, ft_strlen(env));

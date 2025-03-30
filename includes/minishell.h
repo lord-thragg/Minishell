@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/24 10:12:57 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/28 11:55:44 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ char				**ft_splitspace(char const *s);
 char				*ft_strndup(const char *s, size_t n);
 size_t				count_segments(const char *s, size_t *i);
 size_t				count_quotes(const char *s, size_t *i, char quote);
+char				*rebuild_str(char **tab);
 
 /* FREE */
 void				free_all(t_shell *shell, char *emsg, int ecode);
@@ -128,7 +129,7 @@ void				export(t_shell *shell, int i);
 int					cd(t_shell *shell, char *path);
 void				ft_unset(t_shell *shell, char *env_var);
 int					ft_pwd(t_shell *shell);
-void				ft_exit(t_shell *shell);
+int					ft_exit(t_shell *shell);
 void				handle_single_quotes(char **options, int *i,
 						t_shell *shell);
 void				check_env(char *str, int pipefd, t_shell *shell, int i);

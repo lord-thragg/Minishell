@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 16:35:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/09 08:27:28 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/28 11:55:07 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,21 @@
 static t_token	*create_token(char *str)
 {
 	t_token	*ntoken;
+	char	**tmp;
+	char	*rstr;
 
 	ntoken = (t_token *)malloc(sizeof(t_token));
 	if (!ntoken)
 		return (NULL);
-	ntoken->str = ft_strdup(str);
+	tmp = ft_split(str, '"');
+	if (!tmp)
+		return (NULL);
+	rstr = rebuild_str(tmp);
+	ntoken->str = ft_strdup(rstr);
 	if (!ntoken->str)
 		return (NULL);
 	ntoken->next = NULL;
+	ft_freetab(tmp);
 	return (ntoken);
 }
 

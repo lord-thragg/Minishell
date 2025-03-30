@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:37:26 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/24 08:37:48 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/28 08:24:07 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	execute_bultins(char *str, t_shell *shell)
 {
 	if (ft_strcmp(str, "export") == 0)
 	{
+		if (!shell->cmd->cmd_list[1])
+			return (ft_env(shell), 1);
 		export(shell, 1);
 		return (1);
 	}
@@ -33,6 +35,7 @@ int	execute_bultins(char *str, t_shell *shell)
 	{
 		shell->ecode = 0;
 		ft_exit(shell);
+		return (1);
 	}
 	return (0);
 }
