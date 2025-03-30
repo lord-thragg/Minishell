@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/30 13:37:19 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/30 17:30:33 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,10 @@
 # define HEREDOC 8
 
 /* MSG ERROR */
-# define ER_MALLOC "Error: malloc allocation failed.\n"
-# define ER_SHELL "Error: shell allocation failed.\n"
-# define ER_PARSING "Error: Wrong syntax.\n"
+# define ER_MALLOC		"Error: malloc allocation failed.\n"
+# define ER_BUFF		"Error: buffer overflow handled.\n"
+# define ER_SHELL		"Error: shell allocation failed.\n"
+# define ER_PARSING		"Error: Wrong syntax.\n"
 
 /* CODE ERROR */
 # define OK 0
@@ -67,6 +68,10 @@
 # define BUFFER_SIZE 10
 
 /* PARSING */
-int	parsing(t_shell *shell, t_list *token, char *input);
+void	ft_lstclear_cust(t_list **lst, void (*del)(void *));
+int		parsing(t_shell *shell, t_list *token, char *input);
+int		tokenize(t_list **token, char *input);
+void	print_t(t_list *token);
+void	free_all(void);
 
 #endif

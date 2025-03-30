@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:04:36 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/30 14:48:31 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/30 17:31:07 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,75 @@
 
 static int	hoverflow(t_list **token)
 {
-	ft_putchar_fd("Error: buffer overflow handled.\n", 2);
+	ft_putstr_fd(ER_BUFF, 2);
 	ft_lstclear_cust(token, free);
 	return (2);
 }
 
-static int	handle_quotes(char **loop, t_list **token, char *buffer)
+static int	twin_quote(char *str)
 {
-	
+	int		i;
+	char	quote;
+
+	i = 1;
+	quote = str[0];
+	while (str[i])
+	{
+		if (str[i] == quote)
+			return (OK);
+		i++;
+	}
+	return (KO);
+}
+
+static char	*copy_to_twin(char **loop, char buffer[BSIZE])
+{
+	int		i;
+	char	occ;
+
+	i = 0;
+	occ = **loop;
+	(*loop)++;
+	while (**loop != occ)
+	{
+		buffer[i] = **loop;
+		i++;
+		(*loop)++;
+	}
+	(*loop)++;
+	return (buffer);
+}
+
+static void	add_token(t_list **token, char buffer[BSIZE])
+{
+	(void)token;
+	(void)buffer;
+	return ;
+}
+
+static int	handle_quotes(char **loop, t_list **token, char buffer[BSIZE])
+{
+	if (ft_strlen(buffer) > 0)
+	{
+		add_token(token, buffer);
+		ft_bzero(buffer, BSIZE);
+	}
+	if (twin_quote(*loop) == OK)
+	{
+		buffer = copy_to_twin(loop, buffer);
+		add_token(token, buffer);
+		ft_bzero(buffer, BSIZE);
+	}
+	else
+		return (ft_putstr_fd("Error: bad quotes.\n", 2), KO);
+	return (OK);
+}
+
+static void	increments(char **prompt_loop, char *buffer, int *i)
+{
+	buffer[*i] = **prompt_loop;
+	(*i)++;
+	(*prompt_loop)++;
 }
 
 static int	process(char **loop, t_list **token, char *buffer, int *i)
@@ -38,6 +99,9 @@ static int	process(char **loop, t_list **token, char *buffer, int *i)
 			return (KO);
 		*i = 0;
 	}
+	else
+		increments(loop, buffer, i);
+	return (OK);
 }
 
 int	tokenize(t_list **token, char *input)
@@ -55,6 +119,7 @@ int	tokenize(t_list **token, char *input)
 			return (KO);
 	}
 	if (ft_strlen(buffer) > 0)
-		add_token();
+		add_token(token, buffer);
+	print_t(token);
 	return (OK);
 }

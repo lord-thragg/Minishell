@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 12:11:28 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/30 13:40:07 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/30 17:27:23 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static void	quitout(t_shell **shell)
 	(void)shell;
 	printf("%sError%s: a probleme occurred.\n", \
 		RED, RESET);
+	if (shell)
+		free_all();
 }
 
 static int	init_shell(t_shell **shell)

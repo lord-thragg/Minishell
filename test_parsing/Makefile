@@ -5,7 +5,7 @@ OBJDIR = obj
 INCDIR = include
 
 # Source Files
-SRC_PARSING	=	parsing.parsing.c parsing/tokenize/tokenize.c
+SRC_PARSING	=	parsing/parsing.c parsing/tokenize/tokenize.c parsing/utils/utils.c
 SRC = main.c $(SRC_PARSING)
 OBJ = $(SRC:.c=.o)
 SRC := $(addprefix $(SRCDIR)/, $(SRC))
@@ -66,7 +66,6 @@ $(NAME): $(OBJ) $(LIBFT)
 # Libft
 $(LIBFT):
 	$(V)$(MAKE) --silent -C $(LIBFT_DIR)
-	$(V)echo '[$(NAME)] Libft build successfully'
 
 # Clean Rules
 clean:
