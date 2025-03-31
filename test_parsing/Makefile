@@ -17,7 +17,7 @@ LIBFT := $(LIBFT_DIR)/libft.a
 LIBFT_INCLUDE := $(LIBFT_DIR)#/include 		#Your header file in include dir ?
 # Libraries and Linker Flags
 LDFLAGS =  -L$(LIBFT_DIR)
-LIBS =  $(LIBFT)
+LIBS =  $(LIBFT) -lreadline
 
 # Archiver
 AR = ar

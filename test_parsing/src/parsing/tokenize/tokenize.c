@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:04:36 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/30 17:31:07 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/31 11:49:12 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ static char	*copy_to_twin(char **loop, char buffer[BSIZE])
 
 static void	add_token(t_list **token, char buffer[BSIZE])
 {
-	(void)token;
-	(void)buffer;
+	if (*token)
+		*token = ft_lstnew_custom(buffer);
+	else
+		ft_lstadd_back(token, ft_lstnew(buffer));
 	return ;
 }
 
@@ -120,6 +122,6 @@ int	tokenize(t_list **token, char *input)
 	}
 	if (ft_strlen(buffer) > 0)
 		add_token(token, buffer);
-	print_t(token);
+	print_t(*token);
 	return (OK);
 }

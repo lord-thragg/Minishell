@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/30 17:30:33 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/31 11:28:53 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@
 void	ft_lstclear_cust(t_list **lst, void (*del)(void *));
 int		parsing(t_shell *shell, t_list *token, char *input);
 int		tokenize(t_list **token, char *input);
+t_list	*ft_lstnew_custom(char buffer[BSIZE]);
 void	print_t(t_list *token);
 void	free_all(void);
 
