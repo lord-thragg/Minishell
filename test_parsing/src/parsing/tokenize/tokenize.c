@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:04:36 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/31 11:49:12 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/31 14:20:33 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,16 @@ static void	increments(char **prompt_loop, char *buffer, int *i)
 	(*prompt_loop)++;
 }
 
+static int	check_operator(char *loop)
+{
+	if (ft_strncmp(loop, '>', 1))
+		return (OK);
+	if (ft_strncmp(loop, '<', 1))
+		return (OK);
+	if (ft_strncmp(loop, '|', 1))
+		return (OK);
+}
+
 static int	process(char **loop, t_list **token, char *buffer, int *i)
 {
 	if (*i == BSIZE)
@@ -99,6 +109,11 @@ static int	process(char **loop, t_list **token, char *buffer, int *i)
 	{
 		if (handle_quotes(loop, token, buffer) == KO)
 			return (KO);
+		*i = 0;
+	}
+	if (check_operator(*loop))
+	{
+		handle_quotes(loop, token, buffer);
 		*i = 0;
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 17:11:47 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/31 11:44:22 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/31 14:02:29 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	print_t(t_list *token)
 				printf("%s\n", content->str);
 			else
 				printf("(null)\n");
+			if (content->type)
+				printf("type -> %d\n", content->type);
 		}
 		else
 			printf("(null content)\n");
