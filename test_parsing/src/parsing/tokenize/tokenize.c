@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:04:36 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/31 14:20:33 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/03/31 15:54:26 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ static char	*copy_to_twin(char **loop, char buffer[BSIZE])
 
 static void	add_token(t_list **token, char buffer[BSIZE])
 {
-	if (*token)
+	if (*token == NULL)
 		*token = ft_lstnew_custom(buffer);
 	else
-		ft_lstadd_back(token, ft_lstnew(buffer));
+		ft_lstadd_back(token, ft_lstnew_custom(buffer));
 	return ;
 }
 
@@ -89,12 +89,28 @@ static void	increments(char **prompt_loop, char *buffer, int *i)
 
 static int	check_operator(char *loop)
 {
-	if (ft_strncmp(loop, '>', 1))
+	if (ft_strncmp(loop, ">", 1))
 		return (OK);
-	if (ft_strncmp(loop, '<', 1))
+	if (ft_strncmp(loop, "<", 1))
 		return (OK);
-	if (ft_strncmp(loop, '|', 1))
+	if (ft_strncmp(loop, "|", 1))
 		return (OK);
+	return (KO);
+}
+
+void	handle_space(char **prompt_loop, t_list **token, char buffer[BSIZE])
+{
+	t_token	*last;
+
+	if (ft_strlen(buffer) > 0)
+	{
+		add_token(token, buffer);
+		last = ft_lstlast(*token)->content;
+		if (last->str[0] == '-')
+			last->type = ARG;
+		ft_bzero(buffer, BSIZE);
+	}
+	(*prompt_loop)++;
 }
 
 static int	process(char **loop, t_list **token, char *buffer, int *i)
@@ -111,9 +127,14 @@ static int	process(char **loop, t_list **token, char *buffer, int *i)
 			return (KO);
 		*i = 0;
 	}
-	if (check_operator(*loop))
+	else if (check_operator(*loop))
 	{
-		handle_quotes(loop, token, buffer);
+		//handle_operator(loop, token, buffer);
+		*i = 0;
+	}
+	else if (**loop == ' ' || **loop == '\t')
+	{
+		handle_space(loop, token, buffer);
 		*i = 0;
 	}
 	else
