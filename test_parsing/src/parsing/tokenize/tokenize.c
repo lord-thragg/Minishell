@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:04:36 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/01 09:24:42 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/01 13:37:00 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ static void	add_token(t_list **token, char buffer[BSIZE])
 int	check_quote_type(char **loop)
 {
 	if (**loop == 34)
-		return (1);
+		return (DQUOTE);
 	else if (**loop == 39)
-		return (2);
+		return (SQUOTE);
 	return (0);
 }
 

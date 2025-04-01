@@ -6,22 +6,11 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 13:11:34 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/01 09:32:11 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/01 13:30:14 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static	int	expand(t_shell *shell, t_list *token)
-{
-	
-}
-
-static int	parser_set(t_shell *shell, t_list *token, char *input)
-{
-	if (expand(shell, token) == KO)
-		return (KO);
-}
 
 int	parsing(t_shell *shell, t_list *token, char *input)
 {
@@ -30,7 +19,7 @@ int	parsing(t_shell *shell, t_list *token, char *input)
 		if (token)
 			if (parser_set(shell, token, input) == OK)
 				return (OK);
-	ft_lstclear_custom(&token, free);
+	ft_lstclear_cust(&token, free);
 	free(input);
 	return (KO);
 }

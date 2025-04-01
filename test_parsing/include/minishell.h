@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/31 15:48:31 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/01 13:35:32 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,20 @@
 # define ER_SHELL		"Error: shell allocation failed.\n"
 # define ER_PARSING		"Error: Wrong syntax.\n"
 
-/* CODE ERROR */
+/* CODE */
 # define OK 0
 # define KO 1
 # define EXT_SHELL 2
 # define EXT_PARSING 3
+# define SQUOTE 4
+# define DQUOTE 5
 # define EXT_COMMAND_NOT_FOUND 127
 
 /* GNL */
 # define BUFFER_SIZE 10
 
 /* PARSING */
+int		parser_set(t_shell *shell, t_list *token, char *input);
 void	ft_lstclear_cust(t_list **lst, void (*del)(void *));
 int		parsing(t_shell *shell, t_list *token, char *input);
 int		tokenize(t_list **token, char *input);
