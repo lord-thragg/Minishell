@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 13:20:25 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/31 11:18:39 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/01 09:18:23 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_token
 {
 	char	*str;
 	int		type;
+	int		quote;
 }					t_token;
 
 typedef struct s_shell

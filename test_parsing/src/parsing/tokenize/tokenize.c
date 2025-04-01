@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:04:36 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/31 15:54:26 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/01 09:24:42 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,21 @@ static void	add_token(t_list **token, char buffer[BSIZE])
 	return ;
 }
 
+int	check_quote_type(char **loop)
+{
+	if (**loop == 34)
+		return (1);
+	else if (**loop == 39)
+		return (2);
+	return (0);
+}
+
 static int	handle_quotes(char **loop, t_list **token, char buffer[BSIZE])
 {
+	int		quote;
+	t_list	*last;
+	t_token	*content;
+
 	if (ft_strlen(buffer) > 0)
 	{
 		add_token(token, buffer);
@@ -71,8 +84,12 @@ static int	handle_quotes(char **loop, t_list **token, char buffer[BSIZE])
 	}
 	if (twin_quote(*loop) == OK)
 	{
+		quote = check_quote_type(loop);
 		buffer = copy_to_twin(loop, buffer);
 		add_token(token, buffer);
+		last = ft_lstlast(*token);
+		content = last->content;
+		content->quote = quote;
 		ft_bzero(buffer, BSIZE);
 	}
 	else
@@ -113,6 +130,39 @@ void	handle_space(char **prompt_loop, t_list **token, char buffer[BSIZE])
 	(*prompt_loop)++;
 }
 
+static void	set_optype(t_token *token)
+{
+	if (token->str[0] == '|')
+		token->type = PIPE;
+	else if (ft_strncmp(token->str, "<<", 2) == 0)
+		token->type = HEREDOC;
+	else if (ft_strncmp(token->str, ">>", 2) == 0)
+		token->type = APPEND;
+	else if (ft_strncmp(token->str, ">", 2) == 0)
+		token->type = REDOUT;
+	else if (ft_strncmp(token->str, "<", 2) == 0)
+		token->type = REDIN;
+}
+
+static void	handle_operator(char **loop, t_list **token, char buffer[BSIZE])
+{
+	if (ft_strlen(buffer) > 0)
+	{
+		add_token(token, buffer);
+		ft_bzero(buffer, BSIZE);
+	}
+	buffer[0] = **loop;
+	(*loop)++;
+	if (**loop == buffer[0])
+	{
+		buffer[1] = **loop;
+		(*loop)++;
+	}
+	add_token(token, buffer);
+	set_optype(ft_lstlast(*token)->content);
+	ft_bzero(buffer, BSIZE);
+}
+
 static int	process(char **loop, t_list **token, char *buffer, int *i)
 {
 	if (*i == BSIZE)
@@ -129,7 +179,7 @@ static int	process(char **loop, t_list **token, char *buffer, int *i)
 	}
 	else if (check_operator(*loop))
 	{
-		//handle_operator(loop, token, buffer);
+		handle_operator(loop, token, buffer);
 		*i = 0;
 	}
 	else if (**loop == ' ' || **loop == '\t')
