@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:29:49 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/01 13:43:50 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:01:41 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,26 @@ static int	has_dollars(char *str)
 
 static int	start_expanding(t_shell *shell, char ***dollar_tab, char **str)
 {
-	
+	char	*str_expanded;
+	char	**exported;
+
+	str_expanded = ft_strdup(*str);
+	if (!str_expanded)
+		return (ft_putstr_fd(ER_MALLOC, 2), KO);
+	exported = ft_splitspaces(str_expanded);
+	if (!exported)
+	{
+		(free(str_expanded), str_expanded = NULL);
+		return (ft_putstr_fd(ER_MALLOC, 2), KO);
+	}
+	if (set_dollarsNexpande(shell, dollar_tab, &exported) == KO)
+	{
+		(free_tab(exported), exported = NULL);
+		return (free(str_expanded), str_expanded = NULL, KO);
+	}
+	if (build_expandNreplace(&str_expanded, &exported, str) == KO)
+		return (KO);
+	return (OK);
 }
 
 static	int	expand(t_shell *shell, t_list *token)
