@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:29:49 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/01 20:41:12 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/02 10:11:24 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,9 +150,114 @@ static int	build_single(t_shell *shell, char **dollar, char **exported)
 	return (OK);
 }
 
+static int	no_otab(char ***original_tab, char *toadd, char ***newtab)
+{
+	if (!(*original_tab))
+	{
+		*newtab = ft_calloc(2, sizeof(char *));
+		if (!newtab)
+			return (ft_putstr_fd(ER_MALLOC, 2), KO);
+		(*newtab)[0] = ft_strdup(toadd);
+		if (!(*newtab)[0])
+		{
+			ft_freetab(*original_tab);
+			*original_tab = NULL;
+			return (ft_putstr_fd(ER_MALLOC, 2), KO);
+		}
+		(*newtab)[1] = NULL;
+		(*original_tab) = (*newtab);
+		return (OK);
+	}
+	return (OK);
+}
+
+static int	countcopy_otab(char ***original, char ***newtab, int *ntab)
+{
+	(*ntab) = 0;
+	while ((*original)[(*ntab)])
+		(*ntab)++;
+	(*newtab) = ft_calloc((*ntab) + 2, sizeof(char *));
+	if (!newtab)
+		return (ft_putstr_fd(ER_MALLOC, 2), KO);
+	(*ntab) = -1;
+}
+
+static int	add_back_tab(char ***dollar_tab, char *toadd)
+{
+	int		ntab;
+	char	**newtab;
+
+	newtab = NULL;
+	if (!(*dollar_tab))
+		return (no_otab(dollar_tab, toadd, &newtab));
+	if (countcopy_otab(dollar_tab, &newtab, &ntab) == KO)
+		return (KO);
+	if (toadd)
+	{
+		newtab[ntab] = ft_strdup(toadd);
+		if (!newtab)
+		{
+			ft_freetab(*dollar_tab);
+			*dollar_tab = NULL;
+			return (ft_putstr_fd(ER_MALLOC, 2), KO);
+		}
+		ntab++;
+	}
+	newtab[ntab] = NULL;
+	ft_freetab(*dollar_tab);
+	(*dollar_tab) = newtab;
+	return (OK);
+}
+
+static int	fstep_multdollar(t_shell *shell, char ***dollar_tab, char **exported)
+{
+	(*dollar_tab) = ft_split((*exported), '$');
+	if (!(*dollar_tab))
+		return (ft_putstr_fd(ER_MALLOC, 2), KO);
+	if ((*exported)[ft_strlen(*exported) - 1] == '$')
+		if (add_back_tab(dollar_tab, "") == KO)
+			return (KO);
+	if (!(*dollar_tab)[0])
+	{
+		free((*exported));
+		(*exported) = 0;
+		(*exported) = ft_strdup("");
+		if (!(*exported))
+		{
+			ft_freetab(*dollar_tab);
+			return (ft_putstr_fd(ER_MALLOC, 2), KO);
+		}
+		else if (add_doll_tab(shell, dollar_tab, (*exported)) == KO)
+			return (ft_freetab(*dollar_tab), KO);
+		return (OK);
+	}
+}
+
 static int	handle_multdollar(t_shell *shell, char ***dollar_tab, char **exported)
 {
-	
+	int	z;
+
+	if (fstep_multdollar(shell, dollar_tab, exported) == KO)
+		return (KO);
+	free((*exported));
+	z = -1;
+	(*exported) = ft_strdup("");
+	if (!(*exported))
+	{
+		ft_freetab(*dollar_tab);
+		return (ft_putstr_fd(ER_MALLOC, 2), KO);
+	}
+	while ((*dollar_tab)[++z])
+	{
+		(*exported) = ft_strjoin((*exported), (*dollar_tab)[z]);
+		if (!(*exported))
+		{
+			ft_freetab(*dollar_tab);
+			return (ft_putstr_fd(ER_MALLOC, 2), KO);
+		}
+		ft_freetab(*dollar_tab);
+		return (OK);
+	}
 }
 
 static int	set_dollarsNexpande(t_shell *shell, char ***dollar_tab,
