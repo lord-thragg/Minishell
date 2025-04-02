@@ -6,11 +6,53 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:29:49 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/02 10:11:24 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/02 11:17:06 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*the_join(char *str, char *backup, char *buffer)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	j = 0;
+	while (backup[++i])
+		str[i] = backup[i];
+	while (buffer[j])
+		str[i++] = buffer[j++];
+	str[i] = '\0';
+	return (str);
+}
+
+char	*strjoin_free(char *backup, char *buffer)
+{
+	char	*str;
+
+	if (!backup)
+	{
+		backup = malloc(1 * sizeof(char));
+		backup[0] = '\0';
+	}
+	if (!backup || !buffer)
+	{
+		if (backup)
+			free(backup);
+		return (0);
+	}
+	str = malloc(sizeof(char) * ((ft_strlen(backup) + ft_strlen(buffer)) + 1));
+	if (!str)
+	{
+		if (backup)
+			free(backup);
+		return (0);
+	}
+	str = the_join(str, backup, buffer);
+	free(backup);
+	return (str);
+}
 
 static int	condition_for_expand(t_list *token, char *str)
 {
@@ -75,14 +117,14 @@ static char	*no_surround(char *str, t_shell *shell)
 			&& shell->env[i][ft_strlen(str)] == '=')
 		{
 			expanded = ft_strdup(shell->env[i] + ft_strlen(str) + 1);
-			expanded = ft_strjoin(expanded, next_str);
+			expanded = strjoin_free(expanded, next_str);
 			(free(next_str), next_str = NULL);
 			if (!expanded)
 				return (ft_putstr_fd(ER_MALLOC, 2), NULL);
 			return (expanded);
 		}
 	}
-	expanded = ft_strjoin(expanded, next_str);
+	expanded = strjoin_free(expanded, next_str);
 	if (!expanded)
 		return (free(next_str), next_str = NULL,
 			ft_putstr_fd(ER_MALLOC, 2), NULL);
@@ -180,6 +222,17 @@ static int	countcopy_otab(char ***original, char ***newtab, int *ntab)
 	if (!newtab)
 		return (ft_putstr_fd(ER_MALLOC, 2), KO);
 	(*ntab) = -1;
+	while ((*original)[++(*ntab)])
+	{
+		(*newtab)[(*ntab)] = ft_strdup((*original)[(*ntab)]);
+		if (!(*newtab)[(*ntab)])
+		{
+			ft_freetab(*original);
+			*original = NULL;
+			return (ft_putstr_fd(ER_MALLOC, 2), KO);
+		}
+	}
+	return (OK);
 }
 
 static int	add_back_tab(char ***dollar_tab, char *toadd)
@@ -209,6 +262,77 @@ static int	add_back_tab(char ***dollar_tab, char *toadd)
 	return (OK);
 }
 
+static int	add_doll_ftab(t_shell *shell, char ***dollar_tab)
+{
+	char	*add_fdol;
+	char	*tmp_expanded;
+
+	add_fdol = ft_strdup("$");
+	if (!add_fdol)
+		return (ft_putstr_fd(ER_MALLOC, 2), KO);
+	add_fdol = strjoin_free(add_fdol, (*dollar_tab)[0]);
+	if (!add_fdol)
+		return (ft_putstr_fd(ER_MALLOC, 2), KO);
+	tmp_expanded = dollar_expension(add_fdol, DQUOTE, shell);
+	if (!tmp_expanded)
+		return (free(add_fdol), KO);
+	free(add_fdol);
+	add_fdol = 0;
+	free((*dollar_tab)[0]);
+	(*dollar_tab)[0] = 0;
+	(*dollar_tab)[0] = ft_strdup(tmp_expanded);
+	if (!(*dollar_tab)[0])
+	{
+		free(tmp_expanded);
+		return (ft_putstr_fd(ER_MALLOC, 2), KO);
+	}
+	free(tmp_expanded);
+	return (OK);
+}
+
+static int	do_expansion(t_shell *shell, char **dollar_tab)
+{
+	char	*tmp_expanded;
+	char	*tmp;
+
+	tmp = ft_strdup("$");
+	if (!tmp)
+		return (ft_putstr_fd(ER_MALLOC, STDERR_FILENO), KO);
+	tmp = strjoin_free(tmp, (*dollar_tab));
+	if (!tmp)
+		return (ft_putstr_fd(ER_MALLOC, STDERR_FILENO), KO);
+	tmp_expanded = dollar_expension(tmp, DQUOTE, shell);
+	if (!tmp_expanded)
+		return (free(tmp), KO);
+	free(tmp);
+	tmp = 0;
+	free((*dollar_tab));
+	*dollar_tab = 0;
+	(*dollar_tab) = ft_strdup(tmp_expanded);
+	if (!(*dollar_tab))
+	{
+		free(tmp_expanded);
+		return (ft_putstr_fd(ER_MALLOC, STDERR_FILENO), KO);
+	}
+	free(tmp_expanded);
+	tmp_expanded = 0;
+	return (OK);
+}
+
+static int	add_doll_tab(t_shell *shell, char ***dollar_tab, char *exported)
+{
+	int	i;
+
+	if (exported[0] == '$')
+		if (add_doll_ftab(shell, dollar_tab) == KO)
+			return (KO);
+	i = 0;
+	while ((*dollar_tab)[++i])
+		if (do_expansion(shell, &(*dollar_tab)[i]) == KO)
+			return (KO);
+	return (OK);
+}
+
 static int	fstep_multdollar(t_shell *shell, char ***dollar_tab, char **exported)
 {
 	(*dollar_tab) = ft_split((*exported), '$');
@@ -227,10 +351,10 @@ static int	fstep_multdollar(t_shell *shell, char ***dollar_tab, char **exported)
 			ft_freetab(*dollar_tab);
 			return (ft_putstr_fd(ER_MALLOC, 2), KO);
 		}
-		else if (add_doll_tab(shell, dollar_tab, (*exported)) == KO)
-			return (ft_freetab(*dollar_tab), KO);
-		return (OK);
 	}
+	else if (add_doll_tab(shell, dollar_tab, (*exported)) == KO)
+		return (ft_freetab(*dollar_tab), KO);
+	return (OK);
 }
 
 static int	handle_multdollar(t_shell *shell, char ***dollar_tab, char **exported)
@@ -249,15 +373,15 @@ static int	handle_multdollar(t_shell *shell, char ***dollar_tab, char **exported
 	}
 	while ((*dollar_tab)[++z])
 	{
-		(*exported) = ft_strjoin((*exported), (*dollar_tab)[z]);
+		(*exported) = strjoin_free((*exported), (*dollar_tab)[z]);
 		if (!(*exported))
 		{
 			ft_freetab(*dollar_tab);
 			return (ft_putstr_fd(ER_MALLOC, 2), KO);
 		}
-		ft_freetab(*dollar_tab);
-		return (OK);
 	}
+	ft_freetab(*dollar_tab);
+	return (OK);
 }
 
 static int	set_dollarsNexpande(t_shell *shell, char ***dollar_tab,
@@ -284,7 +408,7 @@ static int	set_dollarsNexpande(t_shell *shell, char ***dollar_tab,
 }
 
 static int	build_expandNreplace(char **str_expanded, char ***exported,
-	char *str)
+	char **str)
 {
 	int	y;
 
@@ -292,7 +416,7 @@ static int	build_expandNreplace(char **str_expanded, char ***exported,
 	(free(*str_expanded), *str_expanded = NULL);
 	while ((*exported)[++y])
 	{
-		(*str_expanded) = ft_strjoin((*str_expanded), (*exported)[y]);
+		(*str_expanded) = strjoin_free((*str_expanded), (*exported)[y]);
 		if (!(*str_expanded))
 			return (ft_putstr_fd(ER_MALLOC, 2), KO);
 	}
@@ -300,10 +424,10 @@ static int	build_expandNreplace(char **str_expanded, char ***exported,
 	if ((*str_expanded)[0] != '\0' && \
 		(*str_expanded)[ft_strlen((*str_expanded)) - 1] == ' ')
 		(*str_expanded)[ft_strlen((*str_expanded)) - 1] = '\0';
-	free(str);
+	free(*str);
 	*str = NULL;
 	*str = ft_strdup((*str_expanded));
-	if (!*str)
+	if (!(*str))
 	{
 		(free(*str_expanded), *str_expanded = NULL);
 		return (ft_putstr_fd(ER_MALLOC, 2), KO);
@@ -348,13 +472,13 @@ static	int	expand(t_shell *shell, t_list *token)
 	{
 		if (condition_for_expand(tmp, str_before) == OK)
 			if (has_dollars(((t_token *)tmp->content)->str) == OK)
-				if (start_expand(shell, &dollar_tab,
+				if (start_expanding(shell, &dollar_tab,
 						&((t_token *)tmp->content)->str) == KO)
 					return (KO);
 		str_before = ((t_token *)tmp->content)->str;
 		tmp = tmp->next;
 	}
-	return (KO);
+	return (OK);
 }
 
 int	parser_set(t_shell *shell, t_list *token, char *input)
@@ -362,5 +486,6 @@ int	parser_set(t_shell *shell, t_list *token, char *input)
 	(void)input;
 	if (expand(shell, token) == KO)
 		return (KO);
+	print_t(token);
 	return (OK);
 }

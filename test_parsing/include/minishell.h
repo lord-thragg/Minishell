@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/01 15:01:12 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/02 10:53:32 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int		parsing(t_shell *shell, t_list *token, char *input);
 int		tokenize(t_list **token, char *input);
 t_list	*ft_lstnew_custom(char buffer[BSIZE]);
 char	**ft_splitspaces(const char *s);
+char	**ft_freetab(char **tab);
 void	print_t(t_list *token);
 void	free_all(void);
 

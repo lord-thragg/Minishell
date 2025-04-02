@@ -6,11 +6,26 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 17:11:47 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/31 15:48:14 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/02 10:53:20 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	**ft_freetab(char **tab)
+{
+	size_t	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+	tab = NULL;
+	return (tab);
+}
 
 void	print_t(t_list *token)
 {
