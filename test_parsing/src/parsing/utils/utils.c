@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 17:11:47 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/02 10:53:20 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:05:52 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,13 @@ char	**ft_freetab(char **tab)
 	return (tab);
 }
 
-void	print_t(t_list *token)
+void	printt(char *str, t_list *token)
 {
 	t_list	*tmp;
 	t_token	*content;
 
 	tmp = token;
+	printf("%s\n", str);
 	while (tmp)
 	{
 		if (tmp->content)

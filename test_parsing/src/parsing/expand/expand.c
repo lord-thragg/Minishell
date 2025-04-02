@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:29:49 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/02 11:17:06 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:34:11 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -415,6 +415,9 @@ static int	build_expandNreplace(char **str_expanded, char ***exported,
 	y = -1;
 	(free(*str_expanded), *str_expanded = NULL);
 	while ((*exported)[++y])
+		printf("buildNrepalce -> %s ( expanded variable expected )\n", **exported);
+	y = -1;
+	while ((*exported)[++y])
 	{
 		(*str_expanded) = strjoin_free((*str_expanded), (*exported)[y]);
 		if (!(*str_expanded))
@@ -436,6 +439,7 @@ static int	build_expandNreplace(char **str_expanded, char ***exported,
 	return (OK);
 }
 
+/* ------------------ PROBLEME ICI ------------------ */
 static int	start_expanding(t_shell *shell, char ***dollar_tab, char **str)
 {
 	char	*str_expanded;
@@ -475,6 +479,9 @@ static	int	expand(t_shell *shell, t_list *token)
 				if (start_expanding(shell, &dollar_tab,
 						&((t_token *)tmp->content)->str) == KO)
 					return (KO);
+		if (tmp->next == NULL)
+			break ;
+		printt("expand dans la boucle:", token);
 		str_before = ((t_token *)tmp->content)->str;
 		tmp = tmp->next;
 	}
@@ -486,6 +493,5 @@ int	parser_set(t_shell *shell, t_list *token, char *input)
 	(void)input;
 	if (expand(shell, token) == KO)
 		return (KO);
-	print_t(token);
 	return (OK);
 }

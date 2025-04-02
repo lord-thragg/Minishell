@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:04:36 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/01 13:37:00 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:12:35 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,5 @@ int	tokenize(t_list **token, char *input)
 	}
 	if (ft_strlen(buffer) > 0)
 		add_token(token, buffer);
-	print_t(*token);
 	return (OK);
 }

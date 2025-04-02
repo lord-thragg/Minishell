@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 13:11:34 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/01 13:30:14 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:11:53 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	parsing(t_shell *shell, t_list *token, char *input)
 		if (token)
 			if (parser_set(shell, token, input) == OK)
 				return (OK);
+	printt("after tokenize: ", token);
 	ft_lstclear_cust(&token, free);
 	free(input);
 	return (KO);

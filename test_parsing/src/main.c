@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 12:11:28 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/02 11:21:27 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:08:06 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,10 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	t_shell	shell;
 	char	*input;
-	int		i;
-	int		f;
 
-	i = -1;
-	f = 0;
+	printf("\n%s%s%s\n\n", CYAN, env[0], RESET);
 	while (1)
 	{
-		while (env[++i] && f == 0)
-			printf("%s\n", env[i]);
 		input = readline("\033[0;32mminishell\033[0m-> ");
 		if (!input)
 			return (KO);
@@ -102,7 +97,6 @@ int	main(int ac, char **av, char **env)
 		if (parsing(&shell, (&shell)->token, input) == KO)
 			return (quitout(&shell), KO);
 		free(input);
-		f = 10;
 	}
 	return (0);
 }
