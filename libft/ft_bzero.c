@@ -3,16 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 09:41:59 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:40:03 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/09 10:45:47 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:01:29 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_bzero(void *s, size_t n)
+// Fills a memory area with zeros.
+void	ft_bzero(void *pointer, size_t count)
 {
-	return (ft_memset(s, 0, n));
+	unsigned char	*temp;
+	size_t			i;
+
+	temp = pointer;
+	i = 0;
+	while (i++ < count)
+		*temp++ = '\0';
 }

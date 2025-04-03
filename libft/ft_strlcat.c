@@ -3,24 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 11:01:18 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:41:14 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/13 14:05:41 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:28:36 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcat(char *dst, const char *src, size_t csize)
+//Concatenates two strings, 
+//ensuring the total length doesn't exceed the given size.
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	size_t	slen;
-	size_t	dlen;
+	size_t	dstsize;
+	size_t	srcsize;
+	size_t	i;
+	size_t	j;
 
-	slen = ft_strlen(src);
-	dlen = ft_strlen(dst);
-	if (csize == 0 || dlen >= csize)
-		return (csize + slen);
-	ft_strlcpy(dst + dlen, src, csize - dlen);
-	return (slen + dlen);
+	i = 0;
+	dstsize = ft_strlen(dst);
+	srcsize = ft_strlen(src);
+	j = dstsize;
+	if (size == 0 || size <= dstsize)
+		return (size + srcsize);
+	while (src[i] && i < size - dstsize - 1)
+		dst[j++] = src[i++];
+	dst[j] = '\0';
+	return (dstsize + srcsize);
 }

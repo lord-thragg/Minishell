@@ -5,39 +5,39 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/22 13:18:50 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/30 10:17:05 by luluzuri         ###   ########.fr       */
+/*   Created: 2025/03/30 13:11:34 by luluzuri          #+#    #+#             */
+/*   Updated: 2025/04/03 13:28:29 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_only_space(char *input)
+void	printc(t_cmd *cmd)
 {
 	int	i;
 
-	i = 0;
-	while (input[i] && input[i] != '\n')
+	while (cmd)
 	{
-		if (input[i] != ' ')
-		{
-			i = -1;
-			break ;
-		}
-		i++;
+		i = -1;
+		while (cmd->cmd_list[++i])
+			printf("%s\n", cmd->cmd_list[i]);
+		cmd = cmd->next;
 	}
-	if (i != -1)
-		return (KO);
-	return (OK);
 }
 
-int	parsing(t_shell *shell, char *input)
+int	parsing(t_shell *shell, t_list *token, char *input)
 {
-	if (check_only_space(input) == KO)
-		return (KO);
-	if (ft_strlen(input) > 0 && tokenize(input, &shell->token))
+	if (ft_strlen(input) > 0 && tokenize(&token, input) != KO)
+		if (token)
+			if (parser_set(shell, token, input) == KO)
+				return (KO);
+	shell->token = token;
 	shell->cmd = token_to_command(shell->token);
 	if (!shell->cmd)
-		return (KO);
+		return (ft_lstclear_cust(&token, free), KO);
+	ft_lstclear_cust(&shell->token, free);
+	free(shell->token);
+	shell->token = NULL;
+	//printt("parsing: ", shell->token);
 	return (OK);
 }

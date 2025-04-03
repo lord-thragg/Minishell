@@ -3,29 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/11 21:37:01 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:41:23 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/19 11:57:38 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:07:04 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+// Applies a function to each character of a string and returns a new string.
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	*sub;
 	size_t	i;
+	size_t	slen;
+	char	*result;
 
+	slen = ft_strlen(s);
 	i = 0;
-	sub = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
-	if (!sub)
+	result = (char *)ft_calloc(slen + 1, sizeof(char));
+	if (!result)
 		return (NULL);
-	while (*(s + i))
+	while (i < slen)
 	{
-		sub[i] = f(i, s[i]);
+		result[i] = (*f)(i, s[i]);
 		i++;
 	}
-	sub[i] = '\0';
-	return (sub);
+	return (result);
 }

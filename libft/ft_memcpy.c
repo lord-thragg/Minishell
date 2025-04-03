@@ -3,26 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 09:43:07 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:40:36 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/09 13:12:21 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:04:35 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+// Copies memory from one area to another.
+void	*ft_memcpy(void *destination, const void *source, size_t size)
 {
-	size_t	i;
+	unsigned char		*dest;
+	const unsigned char	*src;
+	size_t				i;
 
-	i = 0;
-	if (!dest && !src)
+	if (!destination && !source)
 		return (NULL);
-	while (i < n)
-	{
-		*(unsigned char *)(dest + i) = *(unsigned char *)(src + i);
-		i++;
-	}
-	return (dest);
+	dest = destination;
+	src = source;
+	i = -1;
+	while (++i < size)
+		dest[i] = src[i];
+	return (destination);
 }

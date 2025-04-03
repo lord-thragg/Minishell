@@ -3,21 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 10:40:05 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 15:58:05 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/15 11:29:35 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:04:44 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_memcmp(const void *s1, const void *s2, size_t n)
+// Compares two memory areas.
+int	ft_memcmp(const void *p1, const void *p2, size_t size)
 {
-	while (n--)
+	unsigned char	*s1;
+	unsigned char	*s2;
+
+	s1 = (unsigned char *)p1;
+	s2 = (unsigned char *)p2;
+	while (size-- > 0)
 	{
-		if (*(unsigned char *)s1 != *(unsigned char *)s2)
-			return (*(unsigned char *)s1 - *(unsigned char *)s2);
+		if (*s1 != *s2)
+			return (*s1 - *s2);
 		s1++;
 		s2++;
 	}

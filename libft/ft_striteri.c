@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/11 21:26:16 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:41:09 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/19 14:27:47 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:28:22 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_striteri(char *s, void (*f)(unsigned int, char*))
+// Applies a function to each character of a string.
+void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {
 	size_t	i;
 
 	i = 0;
-	while (*(s + i))
+	while (s[i])
 	{
-		f(i, &s[i]);
+		(*f)(i, s + i);
 		i++;
 	}
 }

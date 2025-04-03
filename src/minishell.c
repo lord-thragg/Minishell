@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/30 09:59:17 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/03 13:18:22 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,24 +68,26 @@ static int	init_shell(t_shell *shell, char **env)
 	shell->ecode = 0;
 	g_sigpid = 0;
 	if (!init_env(shell, env))
-		return (KO);
-	return (OK);
+		return (0);
+	return (1);
 }
 
 int	manage_parsing_output(t_shell *shell, char *input)
 {
 	int	ret;
 
-	ret = parsing(shell, input);
+	add_history(input);
+	ret = parsing(shell, shell->token, input);
 	if (ret == KO)
 	{
 		free_all(shell, ER_PARSING, -1);
-		return (KO);
+		return (1);
 	}
-	add_history(input);
+	else if (ret == 2)
+		return (1);
 	execute_cmd(shell);
 	free_all(shell, NULL, -1);
-	return (OK);
+	return (0);
 }
 
 int	minishell(char **env)
@@ -93,7 +95,7 @@ int	minishell(char **env)
 	t_shell	shell;
 	char	*input;
 
-	if (init_shell(&shell, env))
+	if (!init_shell(&shell, env))
 		free_all(&shell, ER_SHELL, EXT_SHELL);
 	while (1)
 	{
@@ -107,7 +109,7 @@ int	minishell(char **env)
 			(free(input), free_all(&shell, "exit\n", 0));
 		if (input && *input)
 		{
-			if (manage_parsing_output(&shell, input) == OK)
+			if (manage_parsing_output(&shell, input))
 				continue ;
 		}
 	}

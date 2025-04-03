@@ -3,28 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 23:32:54 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:40:53 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/19 14:58:14 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:05:34 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+// Writes an integer to a file descriptor.
 void	ft_putnbr_fd(int n, int fd)
 {
-	if (n == -2147483648)
-	{
-		ft_putstr_fd("-2147483648", fd);
+	long	i;
+	char	a;
+
+	if (fd < 0)
 		return ;
-	}
-	if (n < 0)
+	i = n;
+	if (i < 0)
 	{
-		ft_putchar_fd('-', fd);
-		n = -n;
+		i *= -1;
+		write(fd, "-", 1);
 	}
-	if (n > 9)
-		ft_putnbr_fd(n / 10, fd);
-	ft_putchar_fd((n % 10) + 48, fd);
+	if (i <= 9)
+	{
+		a = i + '0';
+		write(fd, &a, 1);
+	}
+	if (i > 9)
+	{
+		ft_putnbr_fd(i / 10, fd);
+		ft_putnbr_fd(i % 10, fd);
+	}
 }

@@ -3,22 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 14:10:01 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:40:06 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/13 11:18:26 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:15:25 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_calloc(size_t elnum, size_t elsize)
+// Allocates memory and initializes it to zero.
+void	*ft_calloc(size_t size, size_t type)
 {
-	void	*ptr;
+	void	*pointer;
 
-	ptr = malloc(elnum * elsize);
-	if (!ptr)
-		return (ptr);
-	ft_bzero(ptr, elnum * elsize);
-	return (ptr);
+	if (type && size > 2147483647 / type)
+		return (NULL);
+	pointer = (void *)malloc(size * type);
+	if (!pointer)
+		return (NULL);
+	ft_bzero(pointer, size * type);
+	return (pointer);
 }

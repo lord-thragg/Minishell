@@ -3,22 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 10:04:44 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:40:30 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/15 11:41:31 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:04:52 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memchr(const void *s, int c, size_t n)
+// Finds the first occurrence of a character in a memory area.
+void	*ft_memchr(const void *memoryBlock, int searchedChar, size_t size)
 {
-	while (n--)
+	unsigned char	*s1;
+	unsigned char	c;
+
+	s1 = (unsigned char *)memoryBlock;
+	c = (unsigned char)searchedChar;
+	while (size-- > 0)
 	{
-		if (*(unsigned char *)s == (unsigned char)c)
-			return ((void *)s);
-		s++;
+		if (*s1 == c)
+			return (s1);
+		s1++;
 	}
 	return (NULL);
 }

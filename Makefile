@@ -21,9 +21,9 @@ SRC_ENV 		=	env/ft_getenv.c
 SRC_BULTIN		=	builtin/echo.c builtin/echo_utils.c builtin/env.c builtin/export.c builtin/cd.c builtin/unset.c builtin/pwd.c builtin/exit.c
 SRC_FREE		=	free/free.c
 SRC_SIGNALS		=	signals/signal_handling.c
-SRC_PARSING		=	parsing/parsing.c parsing/command.c parsing/token.c		\
-					parsing/advance_split.c		parsing/ft_splitspace.c		\
-					parsing/utils_commands.c	parsing/utils_commands2.c	
+SRC_PARSING	=	parsing/parsing.c parsing/tokenize/tokenize.c parsing/utils/utils.c \
+				parsing/expand/expand.c parsing/utils/ft_splitspaces.c \
+				parsing/commands/command.c
 SRC_EXEC		=	execution/execution.c execution/loop_execution.c		\
 					execution/files_manager.c execution/here_docs_utils.c	\
 					execution/here_doc_handle.c execution/infile_order.c
@@ -47,7 +47,7 @@ ARFLAGS = rcs
 
 # Compiler and Flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -g3 -I$(LIBFT_INCLUDE) 
+CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -g3 -I$(LIBFT_INCLUDE)
 
 # Compilation mode
 VERBOSE ?= 0

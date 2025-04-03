@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/30 10:24:49 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/03 11:47:08 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,11 @@
 # define CYAN "\033[0;36m"
 # define RESET "\033[0m"
 
-/* PARSING */
-# define BSIZE 4096
-
 /* COMMAND TYPES */
+# define OK 0
+# define KO 1
+# define SQUOTE 4
+# define DQUOTE 5
 # define CMD 1
 # define ARG 2
 # define PIPE 3
@@ -48,21 +49,23 @@
 # define REDOUT 6
 # define APPEND 7
 # define HEREDOC 8
+//# define SPACE		10
 
 /* MSG ERROR */
 # define ER_MALLOC "Error: malloc allocation failed.\n"
 # define ER_SHELL "Error: shell allocation failed.\n"
 # define ER_PARSING "Error: Wrong syntax.\n"
+# define ER_BUFF		"Error: buffer overflow handled.\n"
 
 /* CODE ERROR */
-# define OK 0
-# define KO 1
+# define EXT_MALLOC 1
 # define EXT_SHELL 2
 # define EXT_PARSING 3
 # define EXT_COMMAND_NOT_FOUND 127
 
 /* GNL */
 # define BUFFER_SIZE 10
+# define BSIZE 4096
 
 extern pid_t		g_sigpid;
 
@@ -81,14 +84,13 @@ typedef struct s_token
 {
 	char			*str;
 	int				type;
-	struct s_token	*prev;
-	struct s_token	*next;
+	int				quote;
 }					t_token;
 
 typedef struct s_shell
 {
 	char			**env;
-	t_token			*token;
+	t_list			*token;
 	t_cmd			*cmd;
 	int				ecode;
 	int				last_pid;
@@ -100,17 +102,28 @@ typedef struct s_shell
 int					minishell(char **env);
 
 /* PARSING */
-int					parsing(t_shell *shell, char *input);
+int					parser_set(t_shell *shell, t_list *token, char *input);
+void				ft_lstclear_cust(t_list **lst, void (*del)(void *));
+int					parsing(t_shell *shell, t_list *token, char *input);
+int					tokenize(t_list **token, char *input);
+t_list				*ft_lstnew_custom(char buffer[BSIZE]);
+void				printt(char *str, t_list *token);
+char				**ft_splitspaces(const char *s);
+char				**ft_freetab(char **tab);
+
+/* PARSING COMMANDS */
+t_cmd				*token_to_command(t_list *token);
+t_list				*determine_type(t_cmd **head, t_cmd **cmd, t_list *token);
+t_cmd				*create_cmd(t_cmd *ncmd, t_list *token);
+int					ctoken(t_list *tok);
+char				**initiate_file(t_list *token, int flag);
+void				put_null(char **tab, int len);
+int					ctype(t_list *token, int flag);
+t_list				*arg_type(t_cmd **cmd, t_list *token);
+t_list				*file_type(t_cmd *cmd, t_list *token);
+t_list				*infile_outfile(t_cmd *cmd, t_list *token);
 void				add_cmd(t_cmd **head, t_cmd *ncmd);
-int					ctoken(t_token *tok);
-int					tokenize(char *input, t_token **token);
-t_cmd				*token_to_command(t_token *token);
-t_token				*determine_type(t_cmd **head, t_cmd **cmd, t_token *token);
-size_t				segcount(const char *s);
-char				**ft_splitspace(char const *s);
-char				*ft_strndup(const char *s, size_t n);
-size_t				count_segments(const char *s, size_t *i);
-size_t				count_quotes(const char *s, size_t *i, char quote);
+char				**append_str(char **tab, char *str);
 char				*rebuild_str(char **tab);
 
 /* FREE */

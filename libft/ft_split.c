@@ -3,88 +3,93 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/11 10:25:29 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:40:59 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/22 13:35:01 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:23:38 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	fsplit(char **split, size_t j)
-{
-	while (j--)
-	{
-		if (split[j])
-		{
-			free(split[j]);
-			split[j] = NULL;
-		}
-	}
-	free(split);
-}
-
-static size_t	segcount(char const *s, char c)
+static size_t	ft_countchar(char const *s, char c)
 {
 	size_t	i;
-	size_t	segnum;
+	size_t	count;
 
+	count = 0;
 	i = 0;
-	segnum = 0;
+	while (s[i] == c)
+	{
+		i++;
+	}
 	while (s[i])
 	{
-		while (s[i] == c)
-			i++;
-		if (s[i])
-			segnum++;
-		while (s[i] && s[i] != c)
-			i++;
+		if (s[i] == c || s[i + 1] == '\0')
+		{
+			while (s[i + 1] && s[i + 1] == c)
+			{
+				i++;
+			}
+			count++;
+		}
+		i++;
 	}
-	return (segnum);
+	return (count);
 }
 
-static char	**spliter(char **split, char const *s, char c, size_t start)
+static char	**ft_freetab(char **tab)
 {
 	size_t	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+	tab = NULL;
+	return (tab);
+}
+
+static char	**ft_allocate(char **tab, char const *s, char c, size_t i)
+{
+	size_t	slen;
+	size_t	y;
 	size_t	j;
 
-	i = 0;
 	j = 0;
-	while (s[i])
+	y = 0;
+	slen = ft_strlen(s);
+	while (i < slen)
 	{
-		while (s[i] == c)
-			i++;
-		start = i;
-		while (s[i] && s[i] != c)
-			i++;
-		if (i > start)
+		y = i;
+		if (s[i] != c)
 		{
-			split[j] = ft_substr(s, start, i - start);
-			if (!split[j])
-			{
-				fsplit(split, j);
-				return (NULL);
-			}
+			while (s[y] && s[y] != c)
+				y++;
+			tab[j] = ft_substr(s, i, y - i);
+			if (!tab[j])
+				return (ft_freetab(tab));
 			j++;
+			i = y;
 		}
+		i++;
 	}
-	split[j] = NULL;
-	return (split);
+	tab[j] = 0;
+	return (tab);
 }
 
+// Splits a string into an array of strings based on a delimiter.
 char	**ft_split(char const *s, char c)
 {
-	size_t	segnum;
-	char	**splited;
+	size_t	count;
+	char	**tab;
 
-	if (!s)
+	count = ft_countchar(s, c);
+	tab = (char **)malloc((count + 1) * sizeof(char *));
+	if (!tab)
 		return (NULL);
-	segnum = segcount(s, c);
-	splited = (char **)malloc((segnum + 1) * sizeof(char *));
-	if (!splited)
-		return (NULL);
-	if (!spliter(splited, s, c, 0))
-		return (NULL);
-	return (splited);
+	return (ft_allocate(tab, s, c, 0));
 }

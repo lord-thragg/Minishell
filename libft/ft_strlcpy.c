@@ -3,25 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 10:19:39 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:41:17 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/12 10:45:37 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:28:15 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t csize)
+//Copies a string to another, 
+//ensuring the destination buffer is not overflowed.
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	size_t	slen;
+	size_t	i;
 
-	slen = ft_strlen(src);
-	if (csize == 0)
-		return (slen);
-	if (csize > slen)
-		csize = slen + 1;
-	ft_memcpy(dst, src, csize - 1);
-	dst[csize - 1] = '\0';
-	return (slen);
+	i = 0;
+	if (size == 0)
+		return (ft_strlen(src));
+	while (i < size - 1 && src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (ft_strlen(src));
 }

@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 08:46:53 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:40:13 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/07 11:00:48 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:01:18 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
+// Checks if the character is alphabetic.
 int	ft_isalpha(int c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-		return (1);
+		return (c);
 	return (0);
 }

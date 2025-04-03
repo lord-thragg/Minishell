@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 09:02:49 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:40:24 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/07 15:49:10 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:01:08 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
+// Checks if the character is printable.
 int	ft_isprint(int c)
 {
-	if (c >= 32 && c <= 126)
-		return (1);
-	return (0);
+	return (c >= 32 && c <= 126);
 }

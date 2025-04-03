@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/22 07:32:54 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/03 11:45:35 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	fsplit(char **split, size_t j)
 	free(split);
 }
 
-t_token	*free_token(t_token *head)
+/*t_token	*free_token(t_token *head)
 {
 	t_token	*tmp;
 
@@ -40,7 +40,7 @@ t_token	*free_token(t_token *head)
 	}
 	free(head);
 	return (NULL);
-}
+}*/
 
 t_cmd	*free_cmd(t_cmd *head)
 {
@@ -67,8 +67,8 @@ t_cmd	*free_cmd(t_cmd *head)
 
 void	free_all(t_shell *shell, char *emsg, int ecode)
 {
-	if (shell->token)
-		shell->token = free_token(shell->token);
+/*	if (shell->token)
+		shell->token = free_token(shell->token);*/
 	if (shell->cmd)
 		shell->cmd = free_cmd(shell->cmd);
 	if (emsg)

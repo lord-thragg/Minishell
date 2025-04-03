@@ -3,23 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 14:42:26 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:41:32 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/11 11:11:56 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:14:37 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strrchr(const char *s, int c)
+// Finds the first occurrence of a character in a string.
+char	*ft_strrchr(const char *str, int c)
 {
-	size_t	slen;
+	long	i;
 
-	slen = ft_strlen(s);
-	while (*(s + slen) != (char)c && slen > 0)
-		slen--;
-	if (*(s + slen) == (char)c)
-		return ((char *)(s + slen));
+	i = ft_strlen(str);
+	if (c == 0)
+		return ((char *)str + i);
+	while (i >= 0)
+	{
+		if (str[i] == (unsigned char)c)
+			return ((char *)str + i);
+		i--;
+	}
 	return (NULL);
 }

@@ -3,61 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/11 20:29:48 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 15:28:05 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/15 11:29:29 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:01:05 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	dcount(long n)
+static size_t	intlen(long *nbr)
 {
-	size_t	count;
+	size_t	i;
+	long	temp;
 
-	count = 0;
-	if (n <= 0)
-		count++;
-	while (n)
+	if (*nbr < 0)
+		*nbr = -*nbr;
+	temp = *nbr;
+	i = 0;
+	if (*nbr < 10)
+		return (1);
+	while (temp > 0)
 	{
-		count++;
-		n /= 10;
+		temp /= 10;
+		i++;
 	}
-	return (count);
+	return (i);
 }
 
-static void	int_to_str(char *result, long n, size_t count)
-{
-	result[count] = '\0';
-	if (n == 0)
-	{
-		result[0] = '0';
-		return ;
-	}
-	if (n < 0)
-	{
-		result[0] = '-';
-		n = -n;
-	}
-	while (n)
-	{
-		result[--count] = (n % 10) + '0';
-		n /= 10;
-	}
-}
-
+// Converts an integer to a string.
 char	*ft_itoa(int n)
 {
-	long	tmp;
-	size_t	count;
-	char	*result;
+	long	i;
+	long	nbr;
+	char	*str;
 
-	tmp = n;
-	count = dcount(tmp);
-	result = (char *)malloc((count + 1) * sizeof(char));
-	if (!result)
-		return (NULL);
-	int_to_str(result, tmp, count);
-	return (result);
+	nbr = n;
+	i = intlen(&nbr);
+	if (n < 0)
+		i++;
+	str = (char *)malloc((i + 1) * (sizeof(char)));
+	if (!str)
+		return (0);
+	if (nbr == 0)
+		str[0] = '0';
+	str[i] = '\0';
+	i--;
+	while (nbr > 0 && i >= 0)
+	{
+		str[i] = nbr % 10 + 48;
+		nbr /= 10;
+		i--;
+	}
+	if (n < 0)
+		str[i] = '-';
+	return (str);
 }

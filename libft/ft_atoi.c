@@ -3,34 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 11:57:56 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 15:19:24 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/09 16:08:56 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:01:33 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *nptr)
+static int	ft_isspace(int c)
 {
-	int	sign;
-	int	result;
+	return ((c == ' ') || (c == '\n') || (c == '\t') || (c == '\v')
+		|| (c == '\f') || (c == '\r'));
+}
 
-	sign = 1;
-	result = 0;
-	while (*nptr == 32 || (*nptr >= 9 && *nptr <= 13))
-		nptr++;
-	if (*nptr == '-' || *nptr == '+')
+// Converts a string to an integer.
+int	ft_atoi(const char *str)
+{
+	long	i;
+	long	nbr;
+	int		negative;
+
+	i = -1;
+	negative = 1;
+	while (str[++i] && ft_isspace(str[i]))
+		;
+	if (str[i] == 45)
 	{
-		if (*nptr == '-')
-			sign = -sign;
-		nptr++;
+		negative *= -1;
+		i++;
 	}
-	while (*nptr >= '0' && *nptr <= '9')
+	if (str[i] == 43)
 	{
-		result = result * 10 + (*nptr - 48);
-		nptr++;
+		if (i > 0 && !ft_isspace(str[i - 1]))
+			return (0);
+		else
+			i++;
 	}
-	return (result * sign);
+	nbr = 0;
+	while (str[i] >= 48 && str[i] <= 57)
+		nbr = nbr * 10 + str[i++] % 12;
+	return (nbr * negative);
 }

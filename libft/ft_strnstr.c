@@ -3,27 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 11:00:04 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:41:29 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/12 15:25:56 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:07:37 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+// Locates a substring within a string.
+char	*ft_strnstr(const char *s1, const char *s2, size_t len)
 {
-	size_t	nlen;
+	size_t	i;
+	size_t	s2len;
+	size_t	s1len;
 
-	nlen = ft_strlen(needle);
-	if (!nlen)
-		return ((char *)haystack);
-	while (*haystack && len-- >= nlen)
+	s1len = ft_strlen(s1);
+	s2len = ft_strlen(s2);
+	if (!s1 || !s2 || (s1len == 0 && s2len != 0))
+		return (0);
+	if (s2len == 0)
+		return ((char *)s1);
+	i = 0;
+	while (i < len)
 	{
-		if (!ft_strncmp(haystack, needle, nlen))
-			return ((char *)haystack);
-		haystack++;
+		if (i > s1len - s2len)
+			return (0);
+		if (ft_strncmp(s1 + i, s2, s2len) == 0 && !(i + s2len > len))
+			return (((char *)s1) + i);
+		i++;
 	}
-	return (NULL);
+	if (s1len == 0 && s2len == 0)
+		return ((char *)s1 + s1len);
+	return (0);
 }

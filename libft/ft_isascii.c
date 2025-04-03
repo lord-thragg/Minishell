@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 09:01:44 by lucius            #+#    #+#             */
-/*   Updated: 2024/11/12 13:40:18 by luluzuri         ###   ########.fr       */
+/*   Created: 2024/11/07 15:39:38 by lle-duc           #+#    #+#             */
+/*   Updated: 2024/11/23 23:01:15 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
+// Checks if the character is an ASCII character.
 int	ft_isascii(int c)
 {
-	if (c >= 0 && c <= 127)
-		return (1);
-	return (0);
+	return (c >= 0 && c <= 127);
 }
