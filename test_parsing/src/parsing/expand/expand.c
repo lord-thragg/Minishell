@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:29:49 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/02 16:34:11 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/03 09:14:39 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ static char	*no_surround(char *str, t_shell *shell)
 	return (free(next_str), next_str = NULL, expanded);
 }
 
+/* PROBLEME ICI */
 static char	*create_expand_dollar(t_shell *shell, char *str,
 	char *expanded, int qtype)
 {
@@ -162,11 +163,12 @@ static char	*dollar_expension(char *str, int qtype, t_shell *shell)
 	char	*expanded;
 
 	expanded = NULL;
-	if (!str || !(str[0] != '$'))
+	if (!str || !(str[0] == '$'))
 	{
 		expanded = ft_strdup("");
 		if (!expanded)
 			return (ft_putstr_fd(ER_MALLOC, 2), NULL);
+		printf("test");
 		return (expanded);
 	}
 	if (str[1] == '\0')
@@ -414,8 +416,6 @@ static int	build_expandNreplace(char **str_expanded, char ***exported,
 
 	y = -1;
 	(free(*str_expanded), *str_expanded = NULL);
-	while ((*exported)[++y])
-		printf("buildNrepalce -> %s ( expanded variable expected )\n", **exported);
 	y = -1;
 	while ((*exported)[++y])
 	{
@@ -439,7 +439,6 @@ static int	build_expandNreplace(char **str_expanded, char ***exported,
 	return (OK);
 }
 
-/* ------------------ PROBLEME ICI ------------------ */
 static int	start_expanding(t_shell *shell, char ***dollar_tab, char **str)
 {
 	char	*str_expanded;
@@ -481,7 +480,6 @@ static	int	expand(t_shell *shell, t_list *token)
 					return (KO);
 		if (tmp->next == NULL)
 			break ;
-		printt("expand dans la boucle:", token);
 		str_before = ((t_token *)tmp->content)->str;
 		tmp = tmp->next;
 	}
@@ -493,5 +491,6 @@ int	parser_set(t_shell *shell, t_list *token, char *input)
 	(void)input;
 	if (expand(shell, token) == KO)
 		return (KO);
+	printt("parser_set:", token);
 	return (OK);
 }
