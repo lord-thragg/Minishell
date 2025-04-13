@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/13 10:38:44 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/13 13:22:10 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,9 @@ int	minishell(char **env)
 {
 	t_shell	shell;
 	char	*input;
+	int		debug_fd;
 
+	debug_fd = 0;
 	if (!init_shell(&shell, env))
 		free_all(&shell, ER_SHELL, EXT_SHELL);
 	while (1)
@@ -113,11 +115,11 @@ int	minishell(char **env)
 		if (!input)
 			(free(input), free_all(&shell, "exit\n", 0));
 		if (input && *input)
-		{
-			if (manage_parsing_output(&shell, input))
+			if (debug(&debug_fd, input) == OK && \
+				manage_parsing_output(&shell, input))
 				continue ;
-		}
 	}
-	rl_clear_history();
-	return (0);
+	if (close(debug_fd) == -1)
+		perror("Error closing debug.log");
+	return (rl_clear_history(), 0);
 }

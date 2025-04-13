@@ -16,6 +16,8 @@ OBJDIR = obj
 INCDIR = includes
 
 # Source Files
+SRC_DEBUG		=	debug/debug.c
+
 SRC_MAIN 		=	main.c minishell.c
 SRC_ENV 		=	builtins/env/ft_getenv.c
 
@@ -38,7 +40,7 @@ SRC_EXEC		=	execution/executions_utils/execution.c execution/executions_utils/lo
 					execution/redirect/files_manager.c execution/redirect/infile_order.c \
 					execution/here_docs/here_doc_handle.c execution/here_docs/here_docs_utils.c
 
-SRC = $(SRC_MAIN) $(SRC_FREE) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_ENV) $(SRC_BULTIN) $(SRC_EXEC)
+SRC = $(SRC_DEBUG) $(SRC_MAIN) $(SRC_FREE) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_ENV) $(SRC_BULTIN) $(SRC_EXEC)
 OBJ = $(SRC:.c=.o)
 SRC := $(addprefix $(SRCDIR)/, $(SRC))
 OBJ := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(OBJ))
