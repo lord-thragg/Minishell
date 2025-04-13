@@ -3,30 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   infile_order.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 08:19:11 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/17 12:26:30 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/12 13:35:25 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	choose_infile_order(t_shell *shell)
+void	choose_infile_order(t_shell *shell, t_cmd *cmd)
 {
-	if (shell->cmd->last)
+	if (cmd->last)
 	{
-		if (shell->cmd->infile)
-			manage_infile(shell->cmd->infile, shell->cmd);
+		if (cmd->infile)
+			manage_infile(cmd->infile, cmd);
 		dup2(shell->initin, 0);
-		if (shell->cmd->limiters[0])
-			do_all_heredocs(shell->cmd->limiters);
+		if (cmd->limiters[0])
+			do_all_heredocs(cmd->limiters);
 	}
 	else
 	{
-		if (shell->cmd->limiters[0])
-			do_all_heredocs(shell->cmd->limiters);
-		if (shell->cmd->infile)
-			manage_infile(shell->cmd->infile, shell->cmd);
+		if (cmd->limiters[0])
+			do_all_heredocs(cmd->limiters);
+		if (cmd->infile)
+			manage_infile(cmd->infile, cmd);
 	}
 }

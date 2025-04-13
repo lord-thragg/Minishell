@@ -3,18 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:34:27 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/18 08:01:04 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/13 10:38:36 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// Test singleton
+/*void	*singleton(void *target)
+{
+	static void	*to_keep;
+
+	if (target)
+		to_keep = target;
+	return (to_keep);
+}*/
 void	signal_child(void)
 {
-	signal(SIGQUIT, SIG_DFL);
+	(signal(SIGQUIT, SIG_DFL), signal(SIGINT, SIG_DFL));
 }
 
 void	signal_handler(int code)
@@ -23,6 +32,8 @@ void	signal_handler(int code)
 	printf("\n");
 	rl_replace_line("", 0);
 	rl_on_new_line();
+	if (g_sigpid == 130)
+		rl_redisplay();
 	if (g_sigpid == 0)
 		rl_redisplay();
 	g_sigpid = 130;

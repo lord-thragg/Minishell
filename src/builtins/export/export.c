@@ -6,7 +6,7 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:10:38 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/28 08:12:11 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/03 11:35:29 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static char	**append_export(char **tab, char *str)
 	return (newtab);
 }
 
-static void	export_all_env(char *env, t_shell *shell)
+void	export_all_env(char *env, t_shell *shell)
 {
 	char	**splited;
 	int		i;
@@ -90,7 +90,7 @@ static void	export_all_env(char *env, t_shell *shell)
 	shell->ecode = 0;
 }
 
-static char	*recover_full_env(char *init_env, char *new_env_value)
+char	*recover_full_env(char *init_env, char *new_env_value)
 {
 	char	*new_env;
 	char	*tmp2;

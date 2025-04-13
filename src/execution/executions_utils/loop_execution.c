@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loop_execution.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:54:13 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/22 12:14:04 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/12 13:35:07 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,41 +30,43 @@ static void	wait_all_pid(t_shell *shell)
 	close(shell->initout);
 }
 
-int	manage_pipe_fd(t_shell *shell, int *pipefd)
+int	manage_pipe_fd(t_shell *shell, t_cmd *cmd, int *pipefd)
 {
-	if (!shell->cmd || !shell->cmd->next)
+	if (!cmd || !cmd->next)
 	{
 		close(pipefd[1]);
 		pipefd[1] = 1;
 	}
-	if (shell->cmd->outfile[0] != NULL)
+	if (cmd->outfile[0] != NULL)
 	{
 		close(pipefd[1]);
-		pipefd[1] = manage_outfile(shell->cmd->outfile, shell->cmd->append);
+		pipefd[1] = manage_outfile(cmd->outfile, cmd->append);
 	}
-	if (shell->cmd->infile[0] != NULL || shell->cmd->limiters[0] != NULL)
+	if (cmd->infile[0] != NULL || cmd->limiters[0] != NULL)
 	{
-		choose_infile_order(shell);
+		choose_infile_order(shell, cmd);
 	}
 	return (0);
 }
 
 static void	loop_execution(t_shell *shell, int *pipefd)
 {
-	while (((shell->cmd && shell->cmd->cmd_list[0]) || (shell->cmd
-				&& shell->cmd->limiters[0])))
+	t_cmd	*tmp;
+
+	tmp = shell->cmd;
+	while (((tmp && tmp->cmd_list[0]) || (tmp && tmp->limiters[0])))
 	{
 		pipe(pipefd);
-		manage_pipe_fd(shell, pipefd);
-		if (shell->cmd && shell->cmd->cmd_list[0])
+		manage_pipe_fd(shell, tmp, pipefd);
+		if (tmp && tmp->cmd_list[0])
 		{
 			if (pipefd[0] >= 0 && pipefd[1] >= 1)
-				simple_execution(shell->cmd, shell, pipefd[0], pipefd[1]);
-			shell->cmd = shell->cmd->next;
+				simple_execution(tmp, shell, pipefd[0], pipefd[1]);
+			tmp = tmp->next;
 		}
 		else
 		{
-			if (shell->cmd->limiters[0])
+			if (tmp->limiters[0])
 				break ;
 		}
 	}
@@ -85,5 +87,6 @@ void	execute_cmd(t_shell *shell)
 	shell->initout = dup(1);
 	loop_execution(shell, pipefd);
 	wait_all_pid(shell);
+	g_sigpid = 130;
 	shell->cmd = head;
 }

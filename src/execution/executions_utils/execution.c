@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:37:26 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/28 08:24:07 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:46:39 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	execute_bultins(char *str, t_shell *shell)
 	if (ft_strcmp(str, "export") == 0)
 	{
 		if (!shell->cmd->cmd_list[1])
-			return (ft_env(shell), 1);
+			return (copy_and_display_sorted_env(shell->env), 1);
 		export(shell, 1);
 		return (1);
 	}
@@ -40,21 +40,21 @@ int	execute_bultins(char *str, t_shell *shell)
 	return (0);
 }
 
-void	child_execution(char *cmd, t_shell *shell)
+void	child_execution(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;
 
-	path = find_path(cmd, shell);
+	path = find_path(cmd->cmd_list[0], shell);
 	if (!path)
 	{
-		path = ft_strjoin(cmd, ":command not found\n");
+		path = ft_strjoin(cmd->cmd_list[0], ":command not found\n");
 		ft_putstr_fd(path, 2);
 		free(path);
 		free_all(shell, NULL, -1);
 		ft_freetab(shell->env);
 		exit(EXT_COMMAND_NOT_FOUND);
 	}
-	if (execve(path, shell->cmd->cmd_list, shell->env) == -1)
+	if (execve(path, cmd->cmd_list, shell->env) == -1)
 	{
 		free(path);
 		free_all(shell, NULL, -1);
@@ -79,7 +79,11 @@ static int	check_bultin(t_cmd *cmd, t_shell *shell)
 		free_all(shell, NULL, shell->ecode);
 	}
 	else if (ft_strcmp(cmd->cmd_list[0], "export") == 0)
+	{
+		if (!shell->cmd->cmd_list[1])
+			copy_and_display_sorted_env(shell->env);
 		free_all(shell, NULL, shell->ecode);
+	}
 	else if (ft_strcmp(cmd->cmd_list[0], "env") == 0)
 	{
 		ft_env(shell);
@@ -97,12 +101,10 @@ static int	check_bultin(t_cmd *cmd, t_shell *shell)
 
 void	simple_execution(t_cmd *cmd, t_shell *shell, int pipin, int pipout)
 {
-	int	pid;
-
-	pid = fork();
-	if (pid == -1)
+	g_sigpid = fork();
+	if (g_sigpid == -1)
 		perror("fork failed!\n");
-	if (!pid)
+	if (!g_sigpid)
 	{
 		close(shell->initin);
 		close(shell->initout);
@@ -115,11 +117,11 @@ void	simple_execution(t_cmd *cmd, t_shell *shell, int pipin, int pipout)
 		}
 		signal_child();
 		if (!check_bultin(cmd, shell))
-			child_execution(cmd->cmd_list[0], shell);
+			child_execution(cmd, shell);
 	}
 	else
 	{
 		parent_management(pipin, pipout);
-		shell->last_pid = pid;
+		shell->last_pid = g_sigpid;
 	}
 }

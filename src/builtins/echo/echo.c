@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 11:08:34 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/22 13:51:58 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/12 11:15:53 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,10 @@ void	echo(char **options, t_shell *shell)
 	}
 	while (options[i])
 	{
-		handle_single_quotes(options, &i, shell);
-		if (options[i])
+		ft_putstr_fd(options[i], 1);
+		if (options[i + 1])
 			write(1, " ", 1);
+		i++;
 	}
 	if (no_line)
 		write(1, "\n", 1);

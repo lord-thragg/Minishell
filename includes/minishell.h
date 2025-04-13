@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/03 11:47:08 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/13 11:24:05 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@
 //# define SPACE		10
 
 /* MSG ERROR */
+# define ER_BUFF "Error: buffer overflow handled.\n"
 # define ER_MALLOC "Error: malloc allocation failed.\n"
 # define ER_SHELL "Error: shell allocation failed.\n"
 # define ER_PARSING "Error: Wrong syntax.\n"
-# define ER_BUFF		"Error: buffer overflow handled.\n"
 
 /* CODE ERROR */
 # define EXT_MALLOC 1
@@ -98,8 +98,11 @@ typedef struct s_shell
 	int				initout;
 }					t_shell;
 
+/* TEST */
+
 /* MAIN */
 int					minishell(char **env);
+char				**copy_double_tab(char **env);
 
 /* PARSING */
 int					parser_set(t_shell *shell, t_list *token, char *input);
@@ -110,8 +113,18 @@ t_list				*ft_lstnew_custom(char buffer[BSIZE]);
 void				printt(char *str, t_list *token);
 char				**ft_splitspaces(const char *s);
 char				**ft_freetab(char **tab);
+int					is_space(char c);
+int					count_tokens(const char *s);
+char				*alloc_token(const char *start, int len);
+char				**free_tokens(char **result, int i);
+char				*get_next_token(const char **s, int *len);
+char				**fill_tokens(const char *s, char **result,
+						int tokens_count);
+void				expand_pid(char **str);
+int					get_pid_from_proc(void);
 
 /* PARSING COMMANDS */
+void				printc(t_cmd *cmd);
 t_cmd				*token_to_command(t_list *token);
 t_list				*determine_type(t_cmd **head, t_cmd **cmd, t_list *token);
 t_cmd				*create_cmd(t_cmd *ncmd, t_list *token);
@@ -126,10 +139,59 @@ void				add_cmd(t_cmd **head, t_cmd *ncmd);
 char				**append_str(char **tab, char *str);
 char				*rebuild_str(char **tab);
 
+/* PARSING TOKENIZE */
+t_list				*outfile(t_cmd *cmd, t_list *token);
+int					hoverflow(t_list **token);
+int					twin_quote(char *str);
+char				*copy_to_twin(char **loop, char buffer[BSIZE]);
+void				add_token(t_list **token, char buffer[BSIZE]);
+int					handle_quotes(char **loop, t_list **token,
+						char buffer[BSIZE]);
+void				increments(char **prompt_loop, char *buffer, int *i);
+int					check_operator(char *loop);
+int					check_quote_type(char **loop);
+void				set_optype(t_token *token);
+void				handle_operator(char **loop, t_list **token,
+						char buffer[BSIZE]);
+int					process(char **loop, t_list **token, char *buffer, int *i);
+void				handle_space(char **prompt_loop, t_list **token,
+						char buffer[BSIZE]);
+
+/* PARSING EXPAND */
+char				*the_join(char *str, char *backup, char *buffer);
+char				*strjoin_free(char *backup, char *buffer);
+int					condition_for_expand(t_list *token, char *str);
+int					has_dollars(char *str);
+int					has_multdollars(char *str);
+char				*keep_next_str(char **str);
+char				*no_surround(char *str, t_shell *shell);
+char				*create_expand_dollar(t_shell *shell, char *str,
+						char *expanded, int qtype);
+char				*dollar_expension(char *str, int qtype, t_shell *shell);
+int					build_single(t_shell *shell, char **dollar,
+						char **exported);
+int					no_otab(char ***original_tab, char *toadd, char ***newtab);
+int					countcopy_otab(char ***original, char ***newtab, int *ntab);
+int					add_back_tab(char ***dollar_tab, char *toadd);
+int					add_doll_ftab(t_shell *shell, char ***dollar_tab);
+int					do_expansion(t_shell *shell, char **dollar_tab);
+int					add_doll_tab(t_shell *shell, char ***dollar_tab,
+						char *exported);
+int					fstep_multdollar(t_shell *shell, char ***dollar_tab,
+						char **exported);
+int					handle_multdollar(t_shell *shell, char ***dollar_tab,
+						char **exported);
+int					set_dollarsnexpande(t_shell *shell, char ***dollar_tab,
+						char ***exported);
+int					build_expandnreplace(char **str_expanded, char ***exported,
+						char **str);
+int					start_expanding(t_shell *shell, char ***dollar_tab,
+						char **str);
+int					expand(t_shell *shell, t_list *token);
+
 /* FREE */
 void				free_all(t_shell *shell, char *emsg, int ecode);
 void				fsplit(char **split, size_t j);
-t_token				*free_token(t_token *head);
 t_cmd				*free_cmd(t_cmd *head);
 char				**ft_freetab(char **tab);
 
@@ -142,13 +204,17 @@ void				signal_child(void);
 void				echo(char **options, t_shell *shell);
 void				ft_env(t_shell *shell);
 void				export(t_shell *shell, int i);
+void				export_all_env(char *env, t_shell *shell);
+char				*recover_full_env(char *init_env, char *new_env_value);
+void				change_env_value(t_shell *shell, char *env,
+						char *new_value);
 int					cd(t_shell *shell, char *path);
 void				ft_unset(t_shell *shell, char *env_var);
 int					ft_pwd(t_shell *shell);
 int					ft_exit(t_shell *shell);
-void				handle_single_quotes(char **options, int *i,
-						t_shell *shell);
 void				check_env(char *str, int pipefd, t_shell *shell, int i);
+void				copy_and_display_sorted_env(char **env);
+
 /* ENV	*/
 char				*ft_getenv(char *env_variable, t_shell *shell);
 int					ft_getenv_pos(char *env_variable, t_shell *shell);
@@ -165,7 +231,7 @@ int					manage_outfile(char **files, int append);
 char				*find_path(char *program, t_shell *shell);
 int					execute_bultins(char *str, t_shell *shell);
 int					check_is_relative_path(char *program);
-void				choose_infile_order(t_shell *shell);
+void				choose_infile_order(t_shell *shell, t_cmd *cmd);
 
 /* HEREDOCS */
 void				do_all_heredocs(char **heredocs);

@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 17:11:47 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/03 13:26:53 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:24:00 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	printt(char *str, t_list *token)
 
 t_list	*ft_lstnew_custom(char buffer[BSIZE])
 {
-	char		*the_buffer;
-	t_token		*token;
-	t_list		*new;
+	char	*the_buffer;
+	t_token	*token;
+	t_list	*new;
 
 	the_buffer = ft_strdup(buffer);
 	token = ft_calloc(1, sizeof(t_token));
@@ -59,7 +59,6 @@ void	ft_lstclear_cust(t_list **lst, void (*del)(void *))
 	t_token	*token;
 
 	tmp = *lst;
-	printf("ft_lstclear_cust\n");
 	while (tmp)
 	{
 		token = (t_token *)tmp->content;
@@ -68,4 +67,13 @@ void	ft_lstclear_cust(t_list **lst, void (*del)(void *))
 	}
 	ft_lstclear(lst, del);
 	free(*lst);
+}
+
+void	put_null(char **tab, int len)
+{
+	int	i;
+
+	i = -1;
+	while (++i < len)
+		tab[i] = NULL;
 }

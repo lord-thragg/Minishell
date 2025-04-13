@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/03 13:18:22 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/13 10:38:44 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 pid_t		g_sigpid;
 
-static char	**copy_double_tab(char **env)
+char	**copy_double_tab(char **env)
 {
 	int		i;
 	char	**newtab;
@@ -62,6 +62,8 @@ static int	init_env(t_shell *shell, char **env)
 
 static int	init_shell(t_shell *shell, char **env)
 {
+	char	*new_value;
+
 	set_sigact();
 	shell->token = NULL;
 	shell->cmd = NULL;
@@ -69,6 +71,9 @@ static int	init_shell(t_shell *shell, char **env)
 	g_sigpid = 0;
 	if (!init_env(shell, env))
 		return (0);
+	new_value = ft_itoa(ft_atoi(ft_getenv("SHLVL", shell)) + 1);
+	change_env_value(shell, "SHLVL", new_value);
+	free(new_value);
 	return (1);
 }
 

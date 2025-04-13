@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   files_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:18:45 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/18 07:46:58 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/12 13:52:23 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	check_directory(char *program, char **paths)
+static void	check_directory(char *program, char **paths, t_shell *shell)
 {
 	struct stat	statbuf;
 
@@ -23,16 +23,17 @@ void	check_directory(char *program, char **paths)
 			ft_putstr_fd(program, 2);
 			write(2, ": Is a directory\n", 17);
 			ft_freetab(paths);
-			exit(21);
+			free_all(shell, NULL, 21);
 		}
 	}
 }
 
 static char	*try_access_program(char **paths, char *program)
 {
-	int		i;
-	char	*full_path;
-	char	*tmp;
+	int			i;
+	char		*full_path;
+	char		*tmp;
+	struct stat	statbuf;
 
 	i = 0;
 	while (paths[i])
@@ -43,6 +44,9 @@ static char	*try_access_program(char **paths, char *program)
 		free(tmp);
 		if (access(full_path, F_OK | X_OK) == 0)
 		{
+			if (stat(program, &statbuf) != -1)
+				if (S_ISDIR(statbuf.st_mode))
+					return (free(full_path), NULL);
 			return (full_path);
 		}
 		free(full_path);
@@ -71,7 +75,7 @@ char	*find_path(char *program, t_shell *shell)
 	{
 		ft_freetab(paths);
 		paths = ft_split(ft_getenv("PWD", shell), ':');
-		check_directory(program, paths);
+		check_directory(program, paths, shell);
 	}
 	full_path = try_access_program(paths, program);
 	ft_freetab(paths);

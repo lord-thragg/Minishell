@@ -17,16 +17,26 @@ INCDIR = includes
 
 # Source Files
 SRC_MAIN 		=	main.c minishell.c
-SRC_ENV 		=	env/ft_getenv.c
-SRC_BULTIN		=	builtin/echo.c builtin/echo_utils.c builtin/env.c builtin/export.c builtin/cd.c builtin/unset.c builtin/pwd.c builtin/exit.c
+SRC_ENV 		=	builtins/env/ft_getenv.c
+
+SRC_BULTIN		=	builtins/echo/echo.c builtins/env/env.c \
+					builtins/export/export.c builtins/export/export_utils.c builtins/cd.c \
+					builtins/unset.c builtins/pwd.c builtins/exit.c
+
 SRC_FREE		=	free/free.c
+
 SRC_SIGNALS		=	signals/signal_handling.c
-SRC_PARSING	=	parsing/parsing.c parsing/tokenize/tokenize.c parsing/utils/utils.c \
-				parsing/expand/expand.c parsing/utils/ft_splitspaces.c \
-				parsing/commands/command.c
-SRC_EXEC		=	execution/execution.c execution/loop_execution.c		\
-					execution/files_manager.c execution/here_docs_utils.c	\
-					execution/here_doc_handle.c execution/infile_order.c
+
+SRC_COMMANDS	:=	parsing/commands/command.c parsing/commands/utils.c parsing/commands/utils2.c
+SRC_EXPAND		:=	parsing/expand/expand.c parsing/expand/utils.c \
+					parsing/expand/utils2.c parsing/expand/utils3.c parsing/expand/utils4.c
+SRC_TOKEN		:=	parsing/tokenize/tokenize.c parsing/tokenize/utils.c parsing/tokenize/utils2.c
+SRC_PARSING		:=	parsing/parsing.c parsing/utils/ft_splitspaces.c parsing/utils/utils.c \
+					parsing/utils/utils_split.c $(SRC_COMMANDS) $(SRC_TOKEN) $(SRC_EXPAND)
+
+SRC_EXEC		=	execution/executions_utils/execution.c execution/executions_utils/loop_execution.c \
+					execution/redirect/files_manager.c execution/redirect/infile_order.c \
+					execution/here_docs/here_doc_handle.c execution/here_docs/here_docs_utils.c
 
 SRC = $(SRC_MAIN) $(SRC_FREE) $(SRC_PARSING) $(SRC_SIGNALS) $(SRC_ENV) $(SRC_BULTIN) $(SRC_EXEC)
 OBJ = $(SRC:.c=.o)
@@ -47,7 +57,7 @@ ARFLAGS = rcs
 
 # Compiler and Flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -g3 -I$(LIBFT_INCLUDE)
+CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -g3 -I$(LIBFT_INCLUDE) 
 
 # Compilation mode
 VERBOSE ?= 0

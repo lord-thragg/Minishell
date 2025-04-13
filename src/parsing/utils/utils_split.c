@@ -1,30 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   utils_split.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 11:21:19 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/04/12 11:19:24 by luluzuri         ###   ########.fr       */
+/*   Created: 2025/04/12 12:39:02 by luluzuri          #+#    #+#             */
+/*   Updated: 2025/04/12 12:39:33 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// compare two strings
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	int	i;
+#include "minishell.h"
 
-	i = 0;
-	while (s1[i] && s2[i])
+int	is_space(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n');
+}
+
+int	count_tokens(const char *s)
+{
+	int	count;
+
+	count = 0;
+	while (*s)
 	{
-		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
-		i++;
+		if (is_space(*s))
+		{
+			count++;
+			s++;
+		}
+		else
+		{
+			count++;
+			while (*s && !is_space(*s))
+				s++;
+		}
 	}
-	if (!s1[i] && s2[i])
-		return (-1);
-	if (s1[i] && !s2[i])
-		return (1);
-	return (0);
+	return (count);
 }
