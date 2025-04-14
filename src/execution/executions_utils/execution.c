@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:37:26 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/04/12 13:46:39 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/14 16:22:53 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,13 @@ static int	check_bultin(t_cmd *cmd, t_shell *shell)
 
 void	simple_execution(t_cmd *cmd, t_shell *shell, int pipin, int pipout)
 {
+	singleton(2);
 	g_sigpid = fork();
 	if (g_sigpid == -1)
 		perror("fork failed!\n");
 	if (!g_sigpid)
 	{
+		signal_child();
 		close(shell->initin);
 		close(shell->initout);
 		if (pipin > 0)
@@ -115,7 +117,6 @@ void	simple_execution(t_cmd *cmd, t_shell *shell, int pipin, int pipout)
 			dup2(pipout, 1);
 			close(pipout);
 		}
-		signal_child();
 		if (!check_bultin(cmd, shell))
 			child_execution(cmd, shell);
 	}

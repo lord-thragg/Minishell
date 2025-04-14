@@ -6,7 +6,7 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/14 12:27:04 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/14 16:19:05 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int					debug(int *debug_fd, char *str);
 /* MAIN */
 int					minishell(char **env);
 char				**copy_double_tab(char **env);
+int					singleton(int target);
 
 /* PARSING */
 int					parser_set(t_shell *shell, t_list *token, char *input);
@@ -209,6 +210,7 @@ void				signal_handler(int signum);
 void				set_sigact(void);
 void				signal_child(void);
 char				*ft_strsignal(int sig);
+void				signal_heredoc(void);
 
 /* BULTIN */
 void				echo(char **options, t_shell *shell);
@@ -241,7 +243,7 @@ int					manage_outfile(char **files, int append);
 char				*find_path(char *program, t_shell *shell);
 int					execute_bultins(char *str, t_shell *shell);
 int					check_is_relative_path(char *program);
-void				choose_infile_order(t_shell *shell, t_cmd *cmd);
+int					choose_infile_order(t_shell *shell, t_cmd *cmd);
 
 /* HEREDOCS */
 void				do_all_heredocs(char **heredocs);

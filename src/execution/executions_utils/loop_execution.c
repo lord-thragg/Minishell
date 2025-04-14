@@ -6,7 +6,7 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:54:13 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/04/14 12:37:09 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/14 16:33:25 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,11 @@ static void	wait_all_pid(t_shell *shell)
 		if (wpid == shell->last_pid)
 		{
 			shell->ecode = WEXITSTATUS(status);
-			if (WIFSIGNALED(status))
+			if (WIFSIGNALED(status) && WTERMSIG(status) == 3)
+			{
 				ft_strsignal(WTERMSIG(status));
+				shell->ecode = 131;
+			}
 		}
 		wpid = wait(&status);
 	}
@@ -48,7 +51,11 @@ int	manage_pipe_fd(t_shell *shell, t_cmd *cmd, int *pipefd)
 	}
 	if (cmd->infile[0] != NULL || cmd->limiters[0] != NULL)
 	{
-		choose_infile_order(shell, cmd);
+		if (choose_infile_order(shell, cmd) == -1)
+		{
+			shell->last_pid = 1;
+			return (1);
+		}
 	}
 	return (0);
 }
@@ -56,16 +63,20 @@ int	manage_pipe_fd(t_shell *shell, t_cmd *cmd, int *pipefd)
 static void	loop_execution(t_shell *shell, int *pipefd)
 {
 	t_cmd	*tmp;
+	int		code;
 
 	tmp = shell->cmd;
 	while (((tmp && tmp->cmd_list[0]) || (tmp && tmp->limiters[0])))
 	{
+		singleton(1);
 		pipe(pipefd);
-		manage_pipe_fd(shell, tmp, pipefd);
+		code = manage_pipe_fd(shell, tmp, pipefd);
 		if (tmp && tmp->cmd_list[0])
 		{
-			if (pipefd[0] >= 0 && pipefd[1] >= 1)
+			if (pipefd[0] >= 0 && pipefd[1] >= 1 && code == 0)
 				simple_execution(tmp, shell, pipefd[0], pipefd[1]);
+			if (code)
+				close(pipefd[0]);
 			tmp = tmp->next;
 		}
 		else
@@ -91,6 +102,5 @@ void	execute_cmd(t_shell *shell)
 	shell->initout = dup(1);
 	loop_execution(shell, pipefd);
 	wait_all_pid(shell);
-	g_sigpid = 130;
 	shell->cmd = head;
 }

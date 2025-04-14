@@ -6,7 +6,7 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:18:45 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/04/14 12:42:57 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:57:15 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,7 @@ int	manage_infile(char **files, t_cmd *cmd)
 	while (files[++i])
 	{
 		if (access(files[i], F_OK | R_OK) == -1)
-		{
-			perror(cmd_name);
-		}
+			return (perror(cmd_name), -1);
 		pipefd[0] = open(files[i], O_RDONLY);
 		if (pipefd[0] > 0)
 		{

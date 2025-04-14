@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_handle.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:22:53 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/04/12 13:56:15 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/14 16:26:24 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	here_doc_loop(char *limiter, int pipefd)
 		ft_putstr_fd("> ", 2);
 		line = get_next_line(STDIN_FILENO);
 		split = ft_split(line, '\n');
-		if (split && ft_strcmp(split[0], limiter) == 0)
+		if (split && split[0] && ft_strcmp(split[0], limiter) == 0)
 		{
 			free(line);
 			ft_freetab(split);
@@ -38,24 +38,32 @@ void	here_doc_loop(char *limiter, int pipefd)
 
 void	do_all_heredocs(char **heredocs)
 {
+	pid_t pid;
 	int	i;
 	int	outfd[2];
 
 	i = 0;
-	while (heredocs[i])
+	singleton(2);
+	pid = fork();
+	if (pid == 0)
 	{
-		if (heredocs[i + 1] == NULL)
+		signal_heredoc();
+		while (heredocs[i])
 		{
-			pipe(outfd);
-			here_doc_loop(heredocs[i], outfd[1]);
-			close(STDIN_FILENO);
-			get_next_line(STDIN_FILENO);
-			close(outfd[1]);
-			dup2(outfd[0], 0);
+			if (heredocs[i + 1] == NULL)
+			{
+				pipe(outfd);
+				here_doc_loop(heredocs[i], outfd[1]);
+				close(STDIN_FILENO);
+				get_next_line(STDIN_FILENO);
+				close(outfd[1]);
+				dup2(outfd[0], 0);
+			}
+			else
+				here_doc_loop(heredocs[i], 0);
+			i++;
 		}
-		else
-			here_doc_loop(heredocs[i], 0);
-		i++;
+		exit(0);
 	}
 }
 

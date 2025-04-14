@@ -6,7 +6,7 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/14 12:10:23 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/14 16:19:20 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int	minishell(char **env)
 		free_all(&shell, ER_SHELL, EXT_SHELL);
 	while (1)
 	{
+		singleton(1);
 		input = readline("\033[0;32mminishell\033[0m-> ");
 		if (g_sigpid == 130)
 		{
@@ -114,7 +115,7 @@ int	minishell(char **env)
 			(free(input), free_all(&shell, "exit\n", 0));
 		if (input && *input)
 			if (manage_parsing_output(&shell, input))
-				continue ;
+				continue ;				
 	}
 	return (rl_clear_history(), 0);
 }
