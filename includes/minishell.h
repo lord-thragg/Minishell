@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/13 13:08:40 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/14 12:27:04 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,12 @@ typedef struct s_shell
 	int				initin;
 	int				initout;
 }					t_shell;
+
+typedef struct s_sigmsg
+{
+	int				sig;
+	char			*msg;
+}					t_sigmsg;
 
 /* TEST */
 
@@ -202,6 +208,7 @@ char				**ft_freetab(char **tab);
 void				signal_handler(int signum);
 void				set_sigact(void);
 void				signal_child(void);
+char				*ft_strsignal(int sig);
 
 /* BULTIN */
 void				echo(char **options, t_shell *shell);

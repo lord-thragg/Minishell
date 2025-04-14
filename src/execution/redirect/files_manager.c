@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files_manager.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:18:45 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/04/12 13:52:23 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/14 12:42:57 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static char	*try_access_program(char **paths, char *program)
 char	*find_path(char *program, t_shell *shell)
 {
 	char	**paths;
+	char	*path;
 	char	*full_path;
 
 	if (check_is_relative_path(program))
@@ -67,9 +68,10 @@ char	*find_path(char *program, t_shell *shell)
 		else
 			return (NULL);
 	}
-	paths = ft_split(ft_getenv("PATH", shell), ':');
-	if (!paths)
+	path = ft_getenv("PATH", shell);
+	if (!path)
 		return (NULL);
+	paths = ft_split(path, ':');
 	full_path = try_access_program(paths, program);
 	if (!full_path)
 	{

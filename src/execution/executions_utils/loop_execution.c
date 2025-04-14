@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loop_execution.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:54:13 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/04/12 13:35:07 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/14 12:37:09 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@ static void	wait_all_pid(t_shell *shell)
 	while (wpid > 0)
 	{
 		if (wpid == shell->last_pid)
+		{
 			shell->ecode = WEXITSTATUS(status);
+			if (WIFSIGNALED(status))
+				ft_strsignal(WTERMSIG(status));
+		}
 		wpid = wait(&status);
 	}
 	dup2(shell->initin, 0);
