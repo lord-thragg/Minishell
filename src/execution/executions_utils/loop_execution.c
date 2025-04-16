@@ -6,7 +6,7 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:54:13 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/04/14 16:33:25 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/16 11:34:13 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	manage_pipe_fd(t_shell *shell, t_cmd *cmd, int *pipefd)
 	}
 	if (cmd->infile[0] != NULL || cmd->limiters[0] != NULL)
 	{
-		if (choose_infile_order(shell, cmd) == -1)
+		if (choose_infile_order(shell, cmd, pipefd) == -1)
 		{
 			shell->last_pid = 1;
 			return (1);

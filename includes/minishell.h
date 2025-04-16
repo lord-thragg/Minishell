@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/16 10:39:53 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/16 11:36:06 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,10 +247,12 @@ int					manage_outfile(char **files, int append);
 char				*find_path(char *program, t_shell *shell);
 int					execute_bultins(char *str, t_shell *shell);
 int					check_is_relative_path(char *program);
-int					choose_infile_order(t_shell *shell, t_cmd *cmd);
+int					choose_infile_order(t_shell *shell, t_cmd *cmd,
+						int *pipefd);
 
 /* HEREDOCS */
-void				do_all_heredocs(char **heredocs);
+void				do_all_heredocs(char **heredocs, t_shell *shell,
+						int *pipefd);
 
 /* GNL */
 char				*get_next_line(int fd);

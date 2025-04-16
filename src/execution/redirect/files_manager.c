@@ -6,7 +6,7 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:18:45 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/04/14 13:57:15 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/16 11:44:19 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	manage_infile(char **files, t_cmd *cmd)
 	char	*cmd_name;
 
 	i = -1;
+	pipefd[0] = 0;
 	if (!cmd)
 		cmd_name = NULL;
 	else
