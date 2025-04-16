@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/14 16:19:20 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/16 10:32:09 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,13 @@ int	minishell(char **env)
 {
 	t_shell	shell;
 	char	*input;
+	int		debug_fd;
 
+	debug_fd = 0;
 	if (!init_shell(&shell, env))
 		free_all(&shell, ER_SHELL, EXT_SHELL);
 	while (1)
 	{
-		singleton(1);
 		input = readline("\033[0;32mminishell\033[0m-> ");
 		if (g_sigpid == 130)
 		{
@@ -114,8 +115,11 @@ int	minishell(char **env)
 		if (!input)
 			(free(input), free_all(&shell, "exit\n", 0));
 		if (input && *input)
-			if (manage_parsing_output(&shell, input))
-				continue ;				
+			if (debug(&debug_fd, input, DEBUG) == OK && \
+				manage_parsing_output(&shell, input))
+				continue ;
 	}
+	if (close(debug_fd) == -1)
+		perror("Error closing debug.log");
 	return (rl_clear_history(), 0);
 }

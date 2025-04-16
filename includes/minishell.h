@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 19:26:43 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/14 16:19:05 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/16 10:39:53 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@
 # define BUFFER_SIZE 10
 # define BSIZE 4096
 
+/* DEBUG */
+# define DEBUG 0
+
 extern pid_t		g_sigpid;
 
 typedef struct s_cmd
@@ -107,7 +110,8 @@ typedef struct s_sigmsg
 /* TEST */
 
 /* DEBUG */
-int					debug(int *debug_fd, char *str);
+void				*singleton_fd(void *data);
+int					debug(int *debug_fd, char *str, int debug);
 
 /* MAIN */
 int					minishell(char **env);
