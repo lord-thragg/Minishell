@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:31:19 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/03 13:18:22 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/19 14:51:37 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 pid_t		g_sigpid;
 
-static char	**copy_double_tab(char **env)
+char	**copy_double_tab(char **env)
 {
 	int		i;
 	char	**newtab;
@@ -62,6 +62,8 @@ static int	init_env(t_shell *shell, char **env)
 
 static int	init_shell(t_shell *shell, char **env)
 {
+	char	*new_value;
+
 	set_sigact();
 	shell->token = NULL;
 	shell->cmd = NULL;
@@ -69,6 +71,9 @@ static int	init_shell(t_shell *shell, char **env)
 	g_sigpid = 0;
 	if (!init_env(shell, env))
 		return (0);
+	new_value = ft_itoa(ft_atoi(ft_getenv("SHLVL", shell)) + 1);
+	change_env_value(shell, "SHLVL", new_value);
+	free(new_value);
 	return (1);
 }
 
@@ -99,7 +104,8 @@ int	minishell(char **env)
 		free_all(&shell, ER_SHELL, EXT_SHELL);
 	while (1)
 	{
-		input = readline("\033[0;32mminishell\033[0m-> ");
+		singleton(1);
+		input = readline(RED"minishell\033[0m-> ");
 		if (g_sigpid == 130)
 		{
 			g_sigpid = 0;
@@ -108,11 +114,8 @@ int	minishell(char **env)
 		if (!input)
 			(free(input), free_all(&shell, "exit\n", 0));
 		if (input && *input)
-		{
-			if (manage_parsing_output(&shell, input))
+			if (singleton_input(input) && manage_parsing_output(&shell, input))
 				continue ;
-		}
 	}
-	rl_clear_history();
-	return (0);
+	return (rl_clear_history(), 0);
 }

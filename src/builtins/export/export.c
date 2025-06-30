@@ -6,13 +6,13 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:10:38 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/28 08:12:11 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/19 13:33:15 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**split_first(char *env)
+char	**split_first(char *env)
 {
 	int		i;
 	char	**splited;
@@ -28,7 +28,7 @@ static char	**split_first(char *env)
 			splited[0] = ft_substr(env, 0, i);
 			splited[1] = ft_substr(env, i + 1, ft_strlen(env));
 			splited[2] = NULL;
-			if (!splited[0] || !splited[1])
+			if (!splited[0])
 			{
 				ft_freetab(splited);
 				return (NULL);
@@ -37,7 +37,8 @@ static char	**split_first(char *env)
 		}
 		i++;
 	}
-	return (NULL);
+	splited = ft_split(env, '=');
+	return (splited);
 }
 
 static char	**append_export(char **tab, char *str)
@@ -66,7 +67,7 @@ static char	**append_export(char **tab, char *str)
 	return (newtab);
 }
 
-static void	export_all_env(char *env, t_shell *shell)
+void	export_all_env(char *env, t_shell *shell)
 {
 	char	**splited;
 	int		i;
@@ -75,22 +76,26 @@ static void	export_all_env(char *env, t_shell *shell)
 		return ;
 	splited = split_first(env);
 	if (!splited)
+	{
+		if (!ft_getenv(env, shell))
+			append_export(shell->env, env);
 		return ;
+	}
 	i = ft_getenv_pos(splited[0], shell);
 	if (i >= 0)
 	{
+		if (!splited[1])
+			return ;
 		free(shell->env[i]);
 		shell->env[i] = ft_strdup(env);
 	}
 	else
-	{
 		shell->env = append_export(shell->env, env);
-	}
 	ft_freetab(splited);
 	shell->ecode = 0;
 }
 
-static char	*recover_full_env(char *init_env, char *new_env_value)
+char	*recover_full_env(char *init_env, char *new_env_value)
 {
 	char	*new_env;
 	char	*tmp2;
@@ -116,7 +121,7 @@ void	export(t_shell *shell, int i)
 	j = 0;
 	while (shell->cmd->cmd_list[i])
 	{
-		while (shell->cmd->cmd_list[i][j] != '=')
+		while (shell->cmd->cmd_list[i][j] && shell->cmd->cmd_list[i][j] != '=')
 			j++;
 		if (shell->cmd->cmd_list[i][j + 1] == '$')
 		{

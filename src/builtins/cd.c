@@ -6,39 +6,13 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 07:49:26 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/03/22 10:49:04 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/19 13:34:44 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**append_export(char **tab, char *str)
-{
-	int		i;
-	char	**newtab;
-
-	i = 0;
-	while (tab[i])
-		i++;
-	newtab = malloc(sizeof(char *) * (i + 2));
-	if (!newtab)
-	{
-		perror("malloc failed in export\n");
-		return (NULL);
-	}
-	i = 0;
-	while (tab[i])
-	{
-		newtab[i] = ft_strdup(tab[i]);
-		i++;
-	}
-	ft_freetab(tab);
-	newtab[i] = ft_strdup(str);
-	newtab[i + 1] = NULL;
-	return (newtab);
-}
-
-static int	update_pwd(t_shell *shell, char *path)
+static int	update_pwd(t_shell *shell, char *path, int oldpwd)
 {
 	char	cwd[4096];
 	char	*pwd;
@@ -48,34 +22,59 @@ static int	update_pwd(t_shell *shell, char *path)
 		perror(path);
 		return (1);
 	}
-	pwd = ft_strjoin("PWD=", cwd);
+	if (oldpwd)
+		pwd = ft_strjoin("OLDPWD=", path);
+	else
+		pwd = ft_strjoin("PWD=", cwd);
 	if (!pwd)
 		return (1);
-	shell->env = append_export(shell->env, pwd);
+	export_all_env(pwd, shell);
 	free(pwd);
 	return (0);
 }
 
+int	check_home(t_shell *shell)
+{
+	char	*env;
+	char	oldpwd[4096];
+	int		ret;
+
+	getcwd(oldpwd, 4096);
+	env = ft_getenv("HOME", shell);
+	if (!env)
+		return (printf("cd: HOME not set\n"), 1);
+	ret = chdir(env);
+	if (ret == 0)
+	{
+		update_pwd(shell, env, 0);
+		update_pwd(shell, oldpwd, 1);
+		return (ret);
+	}
+	return (1);
+}
+
 int	cd(t_shell *shell, char *path)
 {
-	int	ret;
+	int		ret;
+	char	oldpwd[4096];
 
+	getcwd(oldpwd, 4096);
 	if (path)
 	{
 		ret = chdir(path);
 		if (ret == 0)
-			update_pwd(shell, path);
+		{
+			update_pwd(shell, path, 0);
+			update_pwd(shell, oldpwd, 1);
+		}
 		if (ret != 0)
 		{
 			perror(path);
-			shell->ecode = 1;
+			return (1);
 		}
-		else
-			shell->ecode = 0;
-		return (ret);
+		return (0);
 	}
-	shell->ecode = 0;
-	return (0);
+	return (check_home(shell));
 }
 
 // int	main(int argc, char **argv)

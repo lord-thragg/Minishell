@@ -6,11 +6,26 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:08:30 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/03 11:45:35 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/20 10:32:37 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	**ft_freetab(char **tab)
+{
+	size_t	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+	tab = NULL;
+	return (tab);
+}
 
 void	fsplit(char **split, size_t j)
 {
@@ -24,23 +39,6 @@ void	fsplit(char **split, size_t j)
 	}
 	free(split);
 }
-
-/*t_token	*free_token(t_token *head)
-{
-	t_token	*tmp;
-
-	while (head)
-	{
-		tmp = head;
-		head = head->next;
-		if (tmp->str != NULL)
-			free(tmp->str);
-		free(tmp);
-		tmp = NULL;
-	}
-	free(head);
-	return (NULL);
-}*/
 
 t_cmd	*free_cmd(t_cmd *head)
 {
@@ -67,10 +65,10 @@ t_cmd	*free_cmd(t_cmd *head)
 
 void	free_all(t_shell *shell, char *emsg, int ecode)
 {
-/*	if (shell->token)
-		shell->token = free_token(shell->token);*/
 	if (shell->cmd)
 		shell->cmd = free_cmd(shell->cmd);
+	if (shell->token)
+		shell->token = NULL;
 	if (emsg)
 		printf("%s", emsg);
 	if (ecode != -1)

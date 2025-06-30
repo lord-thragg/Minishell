@@ -6,7 +6,7 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 11:08:34 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/22 13:51:58 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/19 11:33:23 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,44 +94,53 @@ void	check_env(char *str, int pipefd, t_shell *shell, int i)
 	}
 }
 
-int	check_first_options(char *str)
+static int	check_first_options(char **options)
 {
 	int	i;
+	int	j;
+	int	count;
 
+	count = 1;
 	i = 1;
-	while (str[i])
+	while (options[i])
 	{
-		if (str[i] != 'n')
-			return (ft_putstr_fd(str, 1), 1);
+		j = 1;
+		if (options[i][0] == '-')
+		{
+			while (options[i][j])
+			{
+				if (options[i][j] && options[i][j] != 'n')
+					return (count);
+				j++;
+			}
+			count++;
+		}
+		else
+			return (count);
 		i++;
 	}
-	return (0);
+	return (count);
 }
 
-void	echo(char **options, t_shell *shell)
+void	echo(char **options)
 {
 	int	i;
-	int	no_line;
+	int	count;
 
 	if (!options[1])
 	{
 		write(1, "\n", 1);
 		return ;
 	}
-	i = 1;
-	no_line = ft_strncmp(options[1], "-n", 2);
-	if (!no_line)
-	{
-		no_line = check_first_options(options[1]);
-		i++;
-	}
+	count = check_first_options(options);
+	i = count;
 	while (options[i])
 	{
-		handle_single_quotes(options, &i, shell);
-		if (options[i])
+		ft_putstr_fd(options[i], 1);
+		if (options[i + 1])
 			write(1, " ", 1);
+		i++;
 	}
-	if (no_line)
-		write(1, "\n", 1);
-	shell->ecode = 0;
+	if (count == 1)
+		write (1, "\n", 1);
 }

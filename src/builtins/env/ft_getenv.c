@@ -6,7 +6,7 @@
 /*   By: lle-duc <lle-duc@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:07:45 by lle-duc           #+#    #+#             */
-/*   Updated: 2025/03/22 11:17:24 by lle-duc          ###   ########.fr       */
+/*   Updated: 2025/04/01 16:47:29 by lle-duc          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,21 @@
 static char	*find_envpath(char *env_variable, char **env)
 {
 	char	*path;
+	char	**split;
 	int		i;
 
 	path = NULL;
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], env_variable, ft_strlen(env_variable)) == 0)
+		split = ft_split(env[i], '=');
+		if (ft_strcmp(split[0], env_variable) == 0)
 		{
 			path = env[i] + ft_strlen(env_variable) + 1;
+			ft_freetab(split);
 			break ;
 		}
+		ft_freetab(split);
 		i++;
 	}
 	return (path);

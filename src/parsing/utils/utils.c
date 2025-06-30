@@ -6,38 +6,29 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 17:11:47 by luluzuri          #+#    #+#             */
-/*   Updated: 2025/04/03 13:26:53 by luluzuri         ###   ########.fr       */
+/*   Updated: 2025/04/19 11:39:14 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	printt(char *str, t_list *token)
+void	printt(t_list *token)
 {
-	t_list	*tmp;
-	t_token	*content;
+	t_token	*t;
 
-	tmp = token;
-	printf("%s\n", str);
-	while (tmp)
+	while (token)
 	{
-		if (tmp->content)
-		{
-			content = tmp->content;
-			printf("%s\n", content->str);
-			printf("type -> %d\n", content->type);
-		}
-		else
-			printf("(null content)\n");
-		tmp = tmp->next;
+		t = (t_token *)token->content;
+		printf("[%s] (%d -> %d)\n", t->str, t->sindex, t->eindex);
+		token = token->next;
 	}
 }
 
 t_list	*ft_lstnew_custom(char buffer[BSIZE])
 {
-	char		*the_buffer;
-	t_token		*token;
-	t_list		*new;
+	char	*the_buffer;
+	t_token	*token;
+	t_list	*new;
 
 	the_buffer = ft_strdup(buffer);
 	token = ft_calloc(1, sizeof(t_token));
@@ -59,7 +50,6 @@ void	ft_lstclear_cust(t_list **lst, void (*del)(void *))
 	t_token	*token;
 
 	tmp = *lst;
-	printf("ft_lstclear_cust\n");
 	while (tmp)
 	{
 		token = (t_token *)tmp->content;
@@ -68,4 +58,13 @@ void	ft_lstclear_cust(t_list **lst, void (*del)(void *))
 	}
 	ft_lstclear(lst, del);
 	free(*lst);
+}
+
+void	put_null(char **tab, int len)
+{
+	int	i;
+
+	i = -1;
+	while (++i < len)
+		tab[i] = NULL;
 }
